@@ -30,9 +30,7 @@ const UserRow = ({ user }) => {
     [user]
   );
   const modifiedUser = getModifiedUser(user.id);
-
   const getUniqueFieldId = (userId, field) => `${userId}_${field}`;
-
   const getUserType = () => {
     if (newUser && newUser.id === user.id) {
       return USER_TYPES.NEW;
@@ -73,6 +71,7 @@ const UserRow = ({ user }) => {
 
     setSumErrors();
   };
+  
   const getRemoveUser = () => {
     user.id === newUser?.id ? removeEmptyUser : deleteUserById; //useCallback?
 

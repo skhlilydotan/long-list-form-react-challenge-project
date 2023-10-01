@@ -22,7 +22,7 @@ export const UsersContextProvider = ({ children }) => {
 
       if (modifiedUser) {
         const plainModifiedUser = toPlainUser(modifiedUser);
-        const assembledUser = {};
+        let assembledUser = {};
 
         for (const property in user) {
           if (plainModifiedUser[property]) {
