@@ -1,4 +1,4 @@
-import allowedCountries from './data/countries.json';
+import allowedCountries from '../data/countries.json';
 
 export function toPlainUser(formUser) {
   return Object.entries(formUser).reduce((result, [key, { value }]) => {
@@ -60,14 +60,14 @@ function getTotalUsers({ modifiedUsers, newUser }) {
     totalUsers = modifiedUsers;
   }
 
-  return totalUsers
+  return totalUsers;
 }
 
 export function validateUsers({ newUser, modifiedUsers }) {
   let sumEmptyFields = 0;
   let sumInvalidFields = 0;
 
-  let usersToValidate = getTotalUsers({ modifiedUsers, newUser })
+  let usersToValidate = getTotalUsers({ modifiedUsers, newUser });
 
   usersToValidate = Object.values(usersToValidate);
 

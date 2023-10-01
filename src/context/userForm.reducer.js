@@ -1,4 +1,4 @@
-import { validateField } from '../utils';
+import { validateField } from '../utils/users.utils';
 
 export const INITIAL_STATE = {
   newUser: null,

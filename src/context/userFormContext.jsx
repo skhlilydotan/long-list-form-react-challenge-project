@@ -9,7 +9,7 @@ import {
 
 import { INITIAL_STATE, userFormReducer } from './userForm.reducer';
 
-import { validateUsers, getFormUsersCount } from '../utils';
+import { validateUsers, getFormUsersCount } from '../utils/users.utils';
 
 const UserFormContext = createContext({
   newUser: INITIAL_STATE.newUser,

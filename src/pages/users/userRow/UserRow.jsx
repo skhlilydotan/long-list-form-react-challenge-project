@@ -71,7 +71,7 @@ const UserRow = ({ user }) => {
 
     setSumErrors();
   };
-  
+
   const getRemoveUser = () => {
     user.id === newUser?.id ? removeEmptyUser : deleteUserById; //useCallback?
 

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
-import { toPlainUser } from '../utils';
+import { toPlainUser } from '../utils/users.utils';
 
 import data from '../data/initialUsersData.json';
 

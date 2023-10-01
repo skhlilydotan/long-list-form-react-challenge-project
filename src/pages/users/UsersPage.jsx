@@ -6,7 +6,7 @@ import UsersList from './usersList/UsersList';
 import { useUsersContext } from '../../context/usersContext';
 import { useUserFormContext } from '../../context/userFormContext';
 
-import { validateUsers } from '../../utils';
+import { validateUsers } from '../../utils/users.utils';
 
 import styles from './users.module.css';
 
