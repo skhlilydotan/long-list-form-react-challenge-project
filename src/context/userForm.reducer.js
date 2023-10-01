@@ -1,4 +1,4 @@
-import { toFormUser, validateField } from '../utils';
+import { validateField } from '../utils';
 
 export const INITIAL_STATE = {
   newUser: null,

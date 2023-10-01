@@ -1,4 +1,3 @@
-import { useReducer } from 'react';
 import Loader from '@mui/material/CircularProgress';
 
 import PrimaryButton from '../../components/PrimaryButton';
@@ -7,16 +6,26 @@ import UsersList from './usersList/UsersList';
 import { useUsersContext } from '../../context/usersContext';
 import { useUserFormContext } from '../../context/userFormContext';
 
+import { validateUsers } from '../../utils';
+
 import styles from './users.module.css';
 
 function UsersPage() {
   const { isLoading: isLoadingUsers, saveUsers } = useUsersContext();
-  const { newUser, modifiedUsers, resetForm } = useUserFormContext();
+  const { newUser, modifiedUsers, resetForm, errorCount } = useUserFormContext();
+
+  const isErrors = errorCount.empty > 0 || errorCount.invalid > 0;
 
   function onClickSaveUsers() {
-    // validation
-    saveUsers({ newUser, modifiedUsers });
-    resetForm();
+    const { sumInvalidFields, sumEmptyFields } = validateUsers({
+      newUser,
+      modifiedUsers,
+    });
+
+    if (sumInvalidFields === 0 && sumEmptyFields === 0) {
+      saveUsers({ newUser, modifiedUsers });
+      resetForm();
+    }
   }
 
   if (isLoadingUsers) {
@@ -31,8 +40,15 @@ function UsersPage() {
     <div className={styles.pageRoot}>
       <div className={styles.pageContentContainer}>
         <UsersList />
+
         <div className={styles.rightButtonContainer}>
-          <PrimaryButton disabled={false} handleClick={onClickSaveUsers}>
+          {isErrors && (
+            <>
+              <div>Invalid Fields Count: {errorCount.invalid}</div>
+              <div>Empty Fields Count: {errorCount.empty}</div>
+            </>
+          )}
+          <PrimaryButton disabled={isErrors} handleClick={onClickSaveUsers}>
             Save
           </PrimaryButton>
         </div>

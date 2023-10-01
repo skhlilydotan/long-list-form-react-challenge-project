@@ -21,7 +21,18 @@ export const UsersContextProvider = ({ children }) => {
       const modifiedUser = modifiedUsers[user.id];
 
       if (modifiedUser) {
-        return toPlainUser(modifiedUser);
+        const plainModifiedUser = toPlainUser(modifiedUser);
+        const assembledUser = {};
+
+        for (const property in user) {
+          if (plainModifiedUser[property]) {
+            assembledUser[property] = plainModifiedUser[property];
+          } else {
+            assembledUser[property] = user[property];
+          }
+        }
+
+        return assembledUser;
       }
 
       return user;

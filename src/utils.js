@@ -1,13 +1,5 @@
 import allowedCountries from './data/countries.json';
 
-export function toFormUser(plainUser) {
-  return Object.entries(plainUser).reduce((result, [key, value]) => {
-    result[key] = { value };
-
-    return result;
-  }, {});
-}
-
 export function toPlainUser(formUser) {
   return Object.entries(formUser).reduce((result, [key, { value }]) => {
     result[key] = value;
@@ -51,8 +43,6 @@ export function validateField({ field, value }) {
         result = { error: "must start with '+'" };
       }
 
-      // another validation for amount of + ?
-
       break;
     default:
       throw new Error(`no such field: ${field}`);
@@ -61,44 +51,55 @@ export function validateField({ field, value }) {
   return result;
 }
 
-export function validateUsers(users) {
-  if (users === null) {
-    return null;
+function getTotalUsers({ modifiedUsers, newUser }) {
+  let totalUsers;
+
+  if (newUser) {
+    totalUsers = { ...modifiedUsers, [newUser.id]: newUser };
+  } else {
+    totalUsers = modifiedUsers;
   }
 
-  const usersList = Object.values(users);
+  return totalUsers
+}
 
-  let fields = null;
+export function validateUsers({ newUser, modifiedUsers }) {
+  let sumEmptyFields = 0;
+  let sumInvalidFields = 0;
 
-  const setProblematicField = (fieldName, problem) => {
-    if (fields === null) {
-      fields = [{ fieldName, problem }];
-    } else {
-      fields.push({ fieldName, problem });
-    }
-  };
+  let usersToValidate = getTotalUsers({ modifiedUsers, newUser })
 
-  for (const user of usersList) {
-    if (!user.id) {
-      setProblematicField({ fieldName: 'id', problem: 'EMPTY' });
-    }
+  usersToValidate = Object.values(usersToValidate);
 
-    if (!user.name) {
-      setProblematicField({ fieldName: 'name', problem: 'EMPTY' });
+  usersToValidate.forEach((user) => {
+    if (!user) {
+      return;
     }
 
-    if (!user.country) {
-      setProblematicField({ fieldName: 'country', problem: 'EMPTY' });
+    const fields = Object.entries(user);
+
+    for (const [_, { value, error }] of fields) {
+      if (error) {
+        sumInvalidFields++;
+      } else if (value === '') {
+        sumEmptyFields++;
+      }
+    }
+  });
+
+  return { sumInvalidFields, sumEmptyFields };
+}
+
+export function getFormUsersCount(newUser, modifiedUsers) {
+  let usersForCount = getTotalUsers({ newUser, modifiedUsers });
+
+  return Object.values(usersForCount).reduce((sum, currentUser) => {
+    if (!currentUser) {
+      return sum;
     }
 
-    if (!user.phone) {
-      setProblematicField({ fieldName: 'phone', problem: 'EMPTY' });
-    }
+    sum++;
 
-    if (!user.email) {
-      setProblematicField({ fieldName: 'email', problem: 'EMPTY' });
-    }
-  }
-
-  return { fields, isValid: fields === null };
+    return sum;
+  }, 0);
 }

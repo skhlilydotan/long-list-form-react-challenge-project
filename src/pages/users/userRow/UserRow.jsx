@@ -20,6 +20,7 @@ const UserRow = ({ user }) => {
     setField,
     removeEmptyUser,
     removeModifiedUser,
+    setSumErrors,
   } = useUserFormContext();
 
   const [emptyFieldErrorTrigger, setEmptyFieldErrorTrigger] = useState([]);
@@ -69,6 +70,8 @@ const UserRow = ({ user }) => {
         emptyFieldErrorTrigger.filter((item) => item !== uniqueFieldId)
       );
     }
+
+    setSumErrors();
   };
   const getRemoveUser = () => {
     user.id === newUser?.id ? removeEmptyUser : deleteUserById; //useCallback?
