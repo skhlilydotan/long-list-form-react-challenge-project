@@ -1,6 +1,18 @@
 import { CHART_COLOR_BY_COUNTRY } from '../constants';
 
-export function getChartData(usersCountByCountry) {
+export function getChartData(users) {
+  const usersCountByCountry = users.reduce((result, user) => {
+    const lowerCasedCountry = user.country.toLowerCase();
+
+    if (result[lowerCasedCountry]) {
+      result[lowerCasedCountry] = result[lowerCasedCountry] + 1;
+    } else {
+      result[lowerCasedCountry] = 1;
+    }
+
+    return result;
+  }, {});
+
   let chartData = {};
 
   const labels = Object.keys(usersCountByCountry);

@@ -40,7 +40,6 @@ const InputField = ({
   );
 };
 
-// TODO: Implement passed props
 InputField.defaultProps = {
   name: 'text_field_name',
   value: '',

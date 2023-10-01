@@ -10,9 +10,9 @@ import styles from './statistics.module.css';
 Chart.register(ArcElement, Tooltip, Legend);
 
 function StatisticsPage() {
-  const { users } = useUsersContext();
+  const { users, isLoading } = useUsersContext();
 
-  if (!users) {
+  if (isLoading) {
     return (
       <div className={styles.pageRoot}>
         <Loader size={80} />
@@ -20,17 +20,7 @@ function StatisticsPage() {
     );
   }
 
-  const usersCountByCountry = users.reduce((result, user) => {
-    if (result[user.country]) {
-      result[user.country] = result[user.country] + 1;
-    } else {
-      result[user.country] = 1;
-    }
-
-    return result;
-  }, {});
-
-  const chartData = getChartData(usersCountByCountry);
+  const chartData = getChartData(users);
 
   return (
     <div className={styles.pageRoot}>
