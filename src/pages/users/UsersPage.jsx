@@ -14,6 +14,7 @@ function UsersPage() {
   const { newUser, modifiedUsers, resetForm } = useUserFormContext();
 
   function onClickSaveUsers() {
+    // validation
     saveUsers({ newUser, modifiedUsers });
     resetForm();
   }

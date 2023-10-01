@@ -1,4 +1,4 @@
-import { toFormUser } from '../utils';
+import { toFormUser, validateField } from '../utils';
 
 export const INITIAL_STATE = {
   newUser: null,
@@ -29,12 +29,14 @@ export function userFormReducer(state, action) {
       const { userId, field, value } = action.payload;
       const isNewUserField = state.newUser && state.newUser.id === userId;
 
+      const fieldValidation = validateField({ field, value });
+
       if (isNewUserField) {
         return {
           ...state,
           newUser: {
             ...state.newUser,
-            [field]: { value },
+            [field]: { value, error: fieldValidation ? fieldValidation.error : null },
           },
         };
       }
@@ -45,7 +47,7 @@ export function userFormReducer(state, action) {
           ...state.modifiedUsers,
           [userId]: {
             ...state.modifiedUsers[userId],
-            [field]: { value },
+            [field]: { value, error: fieldValidation ? fieldValidation.error : null },
           },
         },
       };
@@ -68,15 +70,26 @@ export function userFormReducer(state, action) {
       };
     }
     case 'SET_MODIFIED_USER': {
-      const { user } = action.payload;
-      const formUser = toFormUser(user);
+      const { user, field, value } = action.payload;
+      // const formUser = toFormUser(user);
+
+      // let stateUser;
+
+      // for (const key in formUser) {
+      //   if (state.modifiedUsers[user.id][key]?.value) {
+      //     stateUser[key] = state.modifiedUsers[user.id][key]?.value
+      //   } else {
+      //     stateUser[key] = value
+      //   }
+      // }
 
       return {
         ...state,
         modifiedUsers: {
           ...state.modifiedUsers,
           [user.id]: {
-            ...formUser,
+            ...state.modifiedUsers[user.id],
+            [field]: { value },
           },
         },
       };

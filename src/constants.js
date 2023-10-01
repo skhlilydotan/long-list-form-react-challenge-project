@@ -1,0 +1,5 @@
+export const USER_TYPES = {
+  MODIFIED: 'MODIFIED',
+  NEW: 'NEW',
+  EXISTING: 'EXISTING',
+};

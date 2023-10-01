@@ -44,8 +44,6 @@ export const UsersContextProvider = ({ children }) => {
     };
   }, []);
 
-  console.log('users: ', users);
-
   const contextValue = useMemo(
     () => ({
       users,

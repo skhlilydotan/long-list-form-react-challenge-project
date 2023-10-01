@@ -9,6 +9,8 @@ const UserFormContext = createContext({
   setEmptyUser: () => {},
   removeEmptyUser: () => {},
   setModifiedUser: () => {},
+  resetForm: () => {},
+  getModifiedUser: () => {},
 });
 
 export const UserFormContextProvider = ({ children }) => {
@@ -18,11 +20,11 @@ export const UserFormContextProvider = ({ children }) => {
   const removeEmptyUser = () => dispatch({ type: 'REMOVE_EMPTY_USER' });
   const setField = ({ userId, field, value }) =>
     dispatch({ type: 'SET_FIELD', payload: { userId, field, value } });
-  const setModifiedUser = (user) =>
-    dispatch({ type: 'SET_MODIFIED_USER', payload: { user } });
+  const setModifiedUser = ({ user, field, value }) =>
+    dispatch({ type: 'SET_MODIFIED_USER', payload: { user, field, value } });
   const resetForm = () => dispatch({ type: 'RESET_FORM' });
 
-  console.log('state: ', state);
+  const getModifiedUser = (userId) => state.modifiedUsers[userId];
 
   const contextValue = useMemo(
     () => ({
@@ -33,6 +35,7 @@ export const UserFormContextProvider = ({ children }) => {
       removeEmptyUser,
       setModifiedUser,
       resetForm,
+      getModifiedUser,
     }),
     [state.modifiedUsers, state.newUser]
   );
