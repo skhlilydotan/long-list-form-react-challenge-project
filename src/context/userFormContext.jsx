@@ -11,6 +11,7 @@ const UserFormContext = createContext({
   setModifiedUser: () => {},
   resetForm: () => {},
   getModifiedUser: () => {},
+  removeModifiedUser: () => {},
 });
 
 export const UserFormContextProvider = ({ children }) => {
@@ -20,8 +21,10 @@ export const UserFormContextProvider = ({ children }) => {
   const removeEmptyUser = () => dispatch({ type: 'REMOVE_EMPTY_USER' });
   const setField = ({ userId, field, value }) =>
     dispatch({ type: 'SET_FIELD', payload: { userId, field, value } });
-  const setModifiedUser = ({ user, field, value }) =>
-    dispatch({ type: 'SET_MODIFIED_USER', payload: { user, field, value } });
+  const setModifiedUser = ({ userId, field, value }) =>
+    dispatch({ type: 'SET_MODIFIED_USER', payload: { userId, field, value } });
+  const removeModifiedUser = (userId) =>
+    dispatch({ type: 'REMOVE_MODIFIED_USER', payload: { userId } });
   const resetForm = () => dispatch({ type: 'RESET_FORM' });
 
   const getModifiedUser = (userId) => state.modifiedUsers[userId];
@@ -36,6 +39,7 @@ export const UserFormContextProvider = ({ children }) => {
       setModifiedUser,
       resetForm,
       getModifiedUser,
+      removeModifiedUser,
     }),
     [state.modifiedUsers, state.newUser]
   );

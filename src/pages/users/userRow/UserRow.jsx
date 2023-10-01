@@ -13,8 +13,14 @@ import styles from '../users.module.css';
 
 const UserRow = ({ user }) => {
   const { deleteUser: deleteUserById } = useUsersContext();
-  const { newUser, getModifiedUser, setModifiedUser, setField, removeEmptyUser } =
-    useUserFormContext();
+  const {
+    newUser,
+    getModifiedUser,
+    setModifiedUser,
+    setField,
+    removeEmptyUser,
+    removeModifiedUser,
+  } = useUserFormContext();
 
   const [emptyFieldErrorTrigger, setEmptyFieldErrorTrigger] = useState([]);
 
@@ -45,7 +51,11 @@ const UserRow = ({ user }) => {
       return;
     }
 
-    setModifiedUser({ user, field: event.target.name, value: event.target.value });
+    setModifiedUser({
+      userId: user.id,
+      field: event.target.name,
+      value: event.target.value,
+    });
   };
   const onBlur = (event) => {
     const field = event.target.name;
@@ -60,8 +70,19 @@ const UserRow = ({ user }) => {
       );
     }
   };
-  const getRemoveUser = () =>
+  const getRemoveUser = () => {
     user.id === newUser?.id ? removeEmptyUser : deleteUserById; //useCallback?
+
+    if (userType === USER_TYPES.NEW) {
+      return removeEmptyUser;
+    }
+
+    return (userId) => {
+      deleteUserById(userId);
+      removeModifiedUser(userId);
+    };
+  };
+
   const getUiValue = (field, value) => {
     if (userType === USER_TYPES.NEW) {
       return newUser[field]?.value;

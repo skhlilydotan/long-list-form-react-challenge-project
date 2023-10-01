@@ -70,27 +70,27 @@ export function userFormReducer(state, action) {
       };
     }
     case 'SET_MODIFIED_USER': {
-      const { user, field, value } = action.payload;
-      // const formUser = toFormUser(user);
-
-      // let stateUser;
-
-      // for (const key in formUser) {
-      //   if (state.modifiedUsers[user.id][key]?.value) {
-      //     stateUser[key] = state.modifiedUsers[user.id][key]?.value
-      //   } else {
-      //     stateUser[key] = value
-      //   }
-      // }
+      const { userId, field, value } = action.payload;
 
       return {
         ...state,
         modifiedUsers: {
           ...state.modifiedUsers,
-          [user.id]: {
-            ...state.modifiedUsers[user.id],
+          [userId]: {
+            ...state.modifiedUsers[userId],
             [field]: { value },
           },
+        },
+      };
+    }
+    case 'REMOVE_MODIFIED_USER': {
+      const { userId } = action.payload;
+
+      return {
+        ...state,
+        modifiedUsers: {
+          ...state.modifiedUsers,
+          [userId]: undefined,
         },
       };
     }
