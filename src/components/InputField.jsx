@@ -1,19 +1,16 @@
-import { styled } from '@mui/material/styles';
 import { TextField } from '@mui/material';
+import {useMemo} from "react";
 
-const StyledTextField = styled(TextField)({
-  boxShadow: 'none',
-  textTransform: 'none',
-  backgroundColor: '#909196',
-  borderRadius: '4px',
-});
+const InputField = ({ name, value, error, disabled, placeholder,...otherProps }) => {
+  const inputProps = useMemo(() => ({
+      ...(otherProps?.inputProps ?? {}),
+      autoComplete: 'off',
+  }), [otherProps?.inputProps])
 
-const InputField = ({ name, value, onChangehandler, error, disabled, placeholder }) => {
   return (
-    <StyledTextField
+    <TextField
       name={name}
       value={value}
-      onChange={(e) => onChangehandler(e.target.name, e.target.value)}
       error={error}
       disabled={disabled}
       placeholder={placeholder}
@@ -21,21 +18,11 @@ const InputField = ({ name, value, onChangehandler, error, disabled, placeholder
       size="small"
       fullWidth
       autoComplete="off"
-      inputProps={{
-        autoComplete: 'off',
-      }}
+      {...otherProps}
+      inputProps={inputProps}
     />
   );
 };
 
-// TODO: Implement passed props
-InputField.defaultProps = {
-  name: 'text_field_name',
-  value: '',
-  onChangehandler: () => {},
-  error: false,
-  disabled: false,
-  placeholder: '',
-};
 
 export default InputField;

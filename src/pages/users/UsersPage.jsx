@@ -1,21 +1,37 @@
 import UsersList from './usersList/UsersList';
 import PrimaryButton from '../../components/PrimaryButton';
 import styles from './users.module.css';
+import {Formik} from 'formik';
+import {useCallback} from "react";
+import {useUsersContext} from "../../context/usersContext.jsx";
 
 function UsersPage() {
+    const {usersData} = useUsersContext();
+    const onSubmit = useCallback((values, actions) => {
+        setTimeout(() => {
+            alert(JSON.stringify(values, null, 2));
+            actions.setSubmitting(false);
+        }, 1000);
+    }, []);
   return (
     <div className={styles.pageRoot}>
-      <div className={styles.pageContentContainer}>
-        <UsersList />
-        <div className={styles.rightButtonContainer}>
-          <PrimaryButton
-            disabled={false}
-            // TODO: Implement onClick handler
-          >
-            Save
-          </PrimaryButton>
-        </div>
-      </div>
+        <Formik
+            onSubmit={onSubmit}
+            initialValues={{usersData}}
+            enableReinitialize
+        >
+            <div className={styles.pageContentContainer}>
+                <UsersList />
+                <div className={styles.rightButtonContainer}>
+                    <PrimaryButton
+                        disabled={false}
+                        type="submit"
+                    >
+                        Save
+                    </PrimaryButton>
+                </div>
+            </div>
+        </Formik>
     </div>
   );
 }
