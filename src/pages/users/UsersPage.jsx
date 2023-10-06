@@ -4,6 +4,7 @@ import styles from './users.module.css';
 import {Formik} from 'formik';
 import {useCallback} from "react";
 import {useUsersContext} from "../../context/usersContext.jsx";
+import {validationSchema} from "./validationSchema.jsx";
 
 function UsersPage() {
     const {usersData} = useUsersContext();
@@ -19,6 +20,7 @@ function UsersPage() {
             onSubmit={onSubmit}
             initialValues={{usersData}}
             enableReinitialize
+            validationSchema={validationSchema}
         >
             <div className={styles.pageContentContainer}>
                 <UsersList />

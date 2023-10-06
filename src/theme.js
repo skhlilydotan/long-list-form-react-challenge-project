@@ -5,10 +5,13 @@ export const theme = createTheme({
         MuiTextField: {
             styleOverrides: {
                 root: {
-                    boxShadow: 'none',
-                    textTransform: 'none',
-                    backgroundColor: '#909196',
-                    borderRadius: '4px',
+                    '& .MuiOutlinedInput-root': {
+                        height: '40px',
+                        boxShadow: 'none',
+                        textTransform: 'none',
+                        backgroundColor: '#909196',
+                        borderRadius: '4px',
+                    }
                 }
             }
         },
@@ -18,7 +21,6 @@ export const theme = createTheme({
                     '& .MuiOutlinedInput-root': {
                         paddingTop: 0,
                         paddingBottom: 0,
-                        height: '40px'
                     }
                 }
             }

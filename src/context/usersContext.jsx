@@ -13,11 +13,11 @@ export const ContextProvider = ({ children }) => {
   const [usersData, setUsersData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  console.log('usersData', usersData);
 
   useEffect(() => {
     setLoading(true);
     const t = setTimeout(() => {
+      console.log('usersData', data);
       setUsersData(data);
       setLoading(false);
     }, 2000);

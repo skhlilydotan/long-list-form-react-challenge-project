@@ -1,36 +1,59 @@
-import {Grid} from '@mui/material';
+import {Box, debounce, Grid} from '@mui/material';
 import InputField from '../../../components/InputField';
 import TrashIconButton from '../../../components/TrashIconButton';
 import AutocompleteField from "../../../components/AutocompleteField.jsx";
 import styles from '../users.module.css';
 import countryOptions from '../../../data/countries.json';
 import {FieldArray, useFormikContext} from "formik";
-import {memo, useCallback} from "react";
+import {memo, useCallback, useEffect, useState} from "react";
 
 
 const InputFieldWithData = ({placeholder, name}) => {
     const { getFieldMeta, handleChange, handleBlur } = useFormikContext();
-    const {value} = getFieldMeta(name);
-    return <InputField
-        placeholder={placeholder}
-        name={name}
-        onChange={handleChange}
-        value={value}
-        onBlur={handleBlur}
-    />
+    const {value, error, touched} = getFieldMeta(name);
+    const [localValue, setLocalValue] = useState(value ?? '');
+    useEffect(() => {
+        setLocalValue(value ?? '');
+    }, [value]);
+    const debouncedHandleChange = debounce(handleChange, 300);
+    const handleInputChange = (e, value) => {
+        setLocalValue(value);
+        debouncedHandleChange(e, value);
+    };
+    return (
+        <Box pt={1}>
+            <InputField
+                placeholder={placeholder}
+                name={name}
+                onChange={handleInputChange}
+                value={localValue}
+                onBlur={handleBlur}
+                error={touched && !!error}
+                helperText={touched && error}
+            />
+        </Box>
+    )
+
 }
 
 const AutocompleteFieldWithData = ({placeholder, name, options}) => {
-    const { getFieldMeta, setFieldValue } = useFormikContext();
-    const {value} = getFieldMeta(name);
+    const { getFieldMeta, setFieldValue, handleBlur } = useFormikContext();
+    const {value, error, touched} = getFieldMeta(name);
     const onChangeHandle = useCallback((_, value) => setFieldValue(name, value), [name, setFieldValue])
-  return <AutocompleteField
-      placeholder={placeholder}
-     name={name}
-     onChange={onChangeHandle}
-     value={value}
-     options={options}
-  />
+  return (
+      <Box pt={1}>
+          <AutocompleteField
+              placeholder={placeholder}
+              name={name}
+              onChange={onChangeHandle}
+              value={value}
+              onBlur={handleBlur}
+              options={options}
+              error={touched && !!error}
+              helperText={touched && error}
+          />
+      </Box>
+  )
 }
 
 const UserRowMemo = memo(function UserRow({ field, index }) {
@@ -47,7 +70,7 @@ const UserRowMemo = memo(function UserRow({ field, index }) {
     ), [index]);
 
     return (
-        <Grid container className={styles.userRow} direction="row" spacing={1}>
+        <Grid container className={styles.userRow} direction="row" spacing={1} alignItems={'start'}>
             <Grid item xs>
                 <InputFieldWithData placeholder="Name" name={`${path}.name`} />
             </Grid>
@@ -60,7 +83,7 @@ const UserRowMemo = memo(function UserRow({ field, index }) {
             <Grid item xs>
                 <InputFieldWithData placeholder="Phone" name={`${path}.phone`}/>
             </Grid>
-            <Grid item width={50}>
+            <Grid item width={60}>
                 <FieldArray name={field}>
                     {removeButton}
                 </FieldArray>
