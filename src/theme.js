@@ -24,6 +24,15 @@ export const theme = createTheme({
                     }
                 }
             }
+        },
+        MuiButtonBase: {
+            styleOverrides: {
+                root: {
+                    "&.Mui-disabled[disabled]" : {
+                        color: 'rgba(255, 255, 255, 0.26)'
+                    }
+                }
+            }
         }
     }
 });

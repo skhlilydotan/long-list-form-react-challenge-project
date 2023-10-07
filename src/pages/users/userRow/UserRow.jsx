@@ -15,11 +15,11 @@ const InputFieldWithData = ({placeholder, name}) => {
     useEffect(() => {
         setLocalValue(value ?? '');
     }, [value]);
-    const debouncedHandleChange = debounce(handleChange, 300);
-    const handleInputChange = (e, value) => {
+    const handleInputChange = useCallback((e, value) => {
+        const debouncedHandleChange = debounce(handleChange);
         setLocalValue(value);
         debouncedHandleChange(e, value);
-    };
+    },[handleChange]);
     return (
         <Box pt={1}>
             <InputField
