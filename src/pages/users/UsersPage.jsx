@@ -9,20 +9,19 @@ import {createTouched} from "../../helpers/createTouched";
 import {SaveButton} from "./SaveButton.jsx";
 
 function UsersPage() {
-    const {usersData} = useUsersContext();
-    const onSubmit = useCallback((values, actions) => {
-        setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            actions.setSubmitting(false);
-        }, 1000);
-    }, []);
+    const {usersData, setUsersData} = useUsersContext();
+    const saveUserData = useCallback((values) => {
+        setUsersData(values.usersData);
+    }, [setUsersData]);
     const initialValues = useMemo(() => ({usersData}), [usersData]);
     const initialTouched = useMemo(() => createTouched(initialValues), [initialValues]);
+    console.log(initialTouched);
   return (
     <div className={styles.pageRoot}>
         <Formik
-            onSubmit={onSubmit}
+            onSubmit={saveUserData}
             initialValues={initialValues}
+            validateOnMount={true}
             enableReinitialize
             validationSchema={validationSchema}
             initialTouched={initialTouched}
@@ -30,7 +29,7 @@ function UsersPage() {
             <div className={styles.pageContentContainer}>
                 <UsersList/>
                 <ErrorMessage/>
-                <SaveButton/>
+                <SaveButton saveUserData={saveUserData}/>
             </div>
         </Formik>
     </div>

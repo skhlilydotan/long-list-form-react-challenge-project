@@ -1,73 +1,13 @@
-import {Box, debounce, Grid} from '@mui/material';
-import InputField from '../../../components/InputField';
-import TrashIconButton from '../../../components/TrashIconButton';
-import AutocompleteField from "../../../components/AutocompleteField.jsx";
+import {Grid} from '@mui/material';
 import styles from '../users.module.css';
 import countryOptions from '../../../data/countries.json';
-import {FieldArray, useFormikContext} from "formik";
-import {memo, useCallback, useEffect, useState} from "react";
-
-
-const InputFieldWithData = ({placeholder, name}) => {
-    const { getFieldMeta, handleChange, handleBlur } = useFormikContext();
-    const {value, error, touched} = getFieldMeta(name);
-    const [localValue, setLocalValue] = useState(value ?? '');
-    useEffect(() => {
-        setLocalValue(value ?? '');
-    }, [value]);
-    const handleInputChange = useCallback((e, value) => {
-        const debouncedHandleChange = debounce(handleChange);
-        setLocalValue(value);
-        debouncedHandleChange(e, value);
-    },[handleChange]);
-    return (
-        <Box pt={1}>
-            <InputField
-                placeholder={placeholder}
-                name={name}
-                onChange={handleInputChange}
-                value={localValue}
-                onBlur={handleBlur}
-                error={touched && !!error}
-                helperText={touched && error}
-            />
-        </Box>
-    )
-
-}
-
-const AutocompleteFieldWithData = ({placeholder, name, options}) => {
-    const { getFieldMeta, setFieldValue, handleBlur } = useFormikContext();
-    const {value, error, touched} = getFieldMeta(name);
-    const onChangeHandle = useCallback((_, value) => setFieldValue(name, value), [name, setFieldValue])
-  return (
-      <Box pt={1}>
-          <AutocompleteField
-              placeholder={placeholder}
-              name={name}
-              onChange={onChangeHandle}
-              value={value}
-              onBlur={handleBlur}
-              options={options}
-              error={touched && !!error}
-              helperText={touched && error}
-          />
-      </Box>
-  )
-}
+import {memo} from "react";
+import {InputFieldWithData} from "./InputFieldWithData.jsx";
+import {AutocompleteFieldWithData} from "./AutocompleteFieldWithData.jsx";
+import {RemoveButton} from "./RemoveButton.jsx";
 
 const UserRowMemo = memo(function UserRow({ field, index }) {
     const path = `${field}[${index}]`;
-    const removeButton = useCallback(({remove, form}) => (
-        <TrashIconButton
-            handleClick={() => {
-                const {id, newUser} = remove(index);
-                if(!newUser) {
-                    form.setFieldValue('removedIds', (prev) => ([...(prev ?? []), id]))
-                }
-            }}
-        />
-    ), [index]);
 
     return (
         <Grid container className={styles.userRow} direction="row" spacing={1} alignItems={'start'}>
@@ -84,9 +24,7 @@ const UserRowMemo = memo(function UserRow({ field, index }) {
                 <InputFieldWithData placeholder="Phone" name={`${path}.phone`}/>
             </Grid>
             <Grid item width={60}>
-                <FieldArray name={field}>
-                    {removeButton}
-                </FieldArray>
+                <RemoveButton index={index} field={field}/>
             </Grid>
         </Grid>
     );

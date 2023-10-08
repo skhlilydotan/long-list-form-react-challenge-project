@@ -5,9 +5,10 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import {FieldArray} from "formik";
 import {VirtualListContainer} from "./VirtualListContainer.jsx";
 import {UsersListCount} from "./UsersListCount.jsx";
+import {UsersListLoading} from "./UsersListLoading.jsx";
 
 const addButton = ({ unshift }) => (
-    <AddButton handleClick={() => unshift({id: Date.now(), newUser: true})}/>
+    <AddButton handleClick={() => unshift({id: Date.now()})}/>
 );
 
 const virtualListContainer = ({ height, width }) => (
@@ -27,6 +28,7 @@ function UsersList() {
                 <AutoSizer>
                     {virtualListContainer}
                 </AutoSizer>
+                <UsersListLoading />
             </div>
         </div>
     );
