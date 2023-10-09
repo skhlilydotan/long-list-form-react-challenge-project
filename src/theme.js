@@ -1,6 +1,9 @@
 import {createTheme} from "@mui/material";
 
 export const theme = createTheme({
+    palette: {
+        mode: 'dark',
+    },
     components: {
         MuiTextField: {
             styleOverrides: {
@@ -10,6 +13,7 @@ export const theme = createTheme({
                         boxShadow: 'none',
                         textTransform: 'none',
                         backgroundColor: '#909196',
+                        color: 'black',
                         borderRadius: '4px',
                     }
                 }
@@ -21,15 +25,6 @@ export const theme = createTheme({
                     '& .MuiOutlinedInput-root': {
                         paddingTop: 0,
                         paddingBottom: 0,
-                    }
-                }
-            }
-        },
-        MuiButtonBase: {
-            styleOverrides: {
-                root: {
-                    "&.Mui-disabled[disabled]" : {
-                        color: 'rgba(255, 255, 255, 0.26)'
                     }
                 }
             }
