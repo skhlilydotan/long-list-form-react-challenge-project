@@ -1,9 +1,10 @@
 import * as Yup from "yup";
+import {USERS_ROOT_FIELD} from "./constants.js";
 
 export const REQUIRED_FIELD_ERROR = 'required field';
 
 export const validationSchema = Yup.object().shape({
-    usersData: Yup.array().of(
+    [USERS_ROOT_FIELD]: Yup.array().of(
         Yup.object().shape({
             name: Yup.string()
                 .matches(/^[a-z ]+$/i, 'name should include only letters a-z (not case sensitive)')

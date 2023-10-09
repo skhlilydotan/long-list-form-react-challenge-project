@@ -6,6 +6,7 @@ import {FieldArray} from "formik";
 import {VirtualListContainer} from "./VirtualListContainer.jsx";
 import {UsersListCount} from "./UsersListCount.jsx";
 import {UsersListLoading} from "./UsersListLoading.jsx";
+import {USERS_ROOT_FIELD} from "../constants.js";
 
 const addButton = ({ unshift }) => (
     <AddButton handleClick={() => unshift({id: Date.now()})}/>
@@ -20,7 +21,7 @@ function UsersList() {
         <div className={styles.usersList}>
             <div className={styles.usersListHeader}>
                 <Typography variant="h6">Users List <UsersListCount /> </Typography>
-                <FieldArray name="usersData">
+                <FieldArray name={USERS_ROOT_FIELD}>
                     {addButton}
                 </FieldArray>
             </div>
