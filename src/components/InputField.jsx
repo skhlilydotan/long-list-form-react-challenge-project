@@ -8,7 +8,17 @@ const StyledTextField = styled(TextField)({
   borderRadius: '4px',
 });
 
-const InputField = ({ name, value, onChangehandler, error, disabled, placeholder }) => {
+const InputField = ({
+  name,
+  value,
+  onChangehandler,
+  error,
+  disabled,
+  placeholder,
+  fullWidth = true,
+  onFocus,
+  onBlur,
+}) => {
   return (
     <StyledTextField
       name={name}
@@ -19,16 +29,17 @@ const InputField = ({ name, value, onChangehandler, error, disabled, placeholder
       placeholder={placeholder}
       variant="outlined"
       size="small"
-      fullWidth
+      fullWidth={fullWidth}
       autoComplete="off"
       inputProps={{
         autoComplete: 'off',
       }}
+      onFocus={onFocus}
+      onBlur={onBlur}
     />
   );
 };
 
-// TODO: Implement passed props
 InputField.defaultProps = {
   name: 'text_field_name',
   value: '',
