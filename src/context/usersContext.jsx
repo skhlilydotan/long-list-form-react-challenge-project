@@ -4,7 +4,8 @@ import data from '../data/initialUsersData.json';
 // initial value
 const UsersContext = createContext({
   usersData: [],
-  setUsersData: () => {},
+  setUsersData: () => {
+  },
   loading: false,
 });
 
@@ -18,7 +19,7 @@ export const ContextProvider = ({ children }) => {
   useEffect(() => {
     const t = setTimeout(() => {
       setUsersData(data);
-    }, 2000);
+    }, 1000);
 
     return () => {
       clearTimeout(t);

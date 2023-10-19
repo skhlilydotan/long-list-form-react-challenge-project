@@ -1,0 +1,10 @@
+@mixin set-line-clamp($num_of_rows: 2) {
+  @supports (-webkit-line-clamp: $num_of_rows) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: initial;
+    -webkit-line-clamp: $num_of_rows;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+  }
+}

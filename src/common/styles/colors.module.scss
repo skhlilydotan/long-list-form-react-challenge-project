@@ -1,0 +1,7 @@
+@import "src/common/styles/_basecolors.module.scss";
+
+:export {
+  @each $key, $value in $colors {
+    #{$key}: $value;
+  }
+}

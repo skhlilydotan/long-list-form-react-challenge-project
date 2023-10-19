@@ -1,4 +1,4 @@
-import UsersList from './usersList/UsersList';
+import UsersList from '../../components/usersList/UsersList';
 import PrimaryButton from '../../components/PrimaryButton';
 import styles from './users.module.css';
 

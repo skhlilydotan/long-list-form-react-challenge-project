@@ -1,0 +1,128 @@
+@import "@common/styles/_basecolors.module.scss";
+@import "@common/styles/_skin.module.scss";
+@import "@common/styles/_functions.module.scss";
+@import "@common/styles/_typography.module.scss";
+
+$input-menu-item-default-level-width: 308px;
+$input-menu-item-2nd-level-width: 264px;
+$default-min-width-icon: 40px;
+
+
+$item-gap: 8px;
+$items-radius: (
+        "button": 8px,
+        "input": 8px,
+);
+
+$item-measurements: (
+        "sm": (
+                "height": 36px, "padding": 8px 14px, "fontSize": "sm"
+        ),
+        "md":(
+                "height": 40px, "padding": 10px 16px, "fontSize": "sm"
+        ),
+        "lg":(
+                "height": 44px, "padding": 10px 18px, "fontSize": "md"
+        ),
+);
+
+$input-measurements: (
+        "sm": ("height": 40px, "width": 320px, "padding": 10px 12px),
+        "md": ("height": 44px, "width": 320px, "padding": 10px 14px),
+);
+
+
+$icon-placeholder: (
+        "xs": ("icon":20px, "button":20px, "icon-featured": 12px),
+        "sm": ("icon":20px, "button":20px, "icon-featured": 19px, "carousel-arrow":16px, "logo": 24px),
+        "md": ("icon":20px, "button":20px, "icon-featured": 20px, "carousel-arrow":20px, "logo": 42px),
+        "lg": ("icon":24px, "button":20px, "icon-featured": 24px, "carousel-arrow":24px, "logo": 80px),
+        "xl": ("icon":24px, "button":20px, "icon-featured": 28px),
+);
+
+
+@function get-icon-placeholder($size, $comp) {
+  @return map-deep-get($icon-placeholder, $size, $comp);
+}
+
+@function get-item-radius($comp) {
+  @return map-get($items-radius, $comp);
+}
+
+@function get-input-measurements($size, $attr) {
+  @return map-deep-get($input-measurements, $size, $attr);
+}
+
+@function get-item-measurements($size, $attr) {
+  @return map-deep-get($item-measurements, $size, $attr);
+}
+
+
+@function get-item-height($size: "md") {
+  @return get-item-measurements($size, "height");
+}
+
+@function get-item-padding($size: "md") {
+  @return get-item-measurements($size, "padding");
+}
+
+
+@function get-item-font-size($size: "md") {
+  @return get-item-measurements($size, "fontSize");
+}
+
+@function get-item-gap($size: "md") {
+  @return $item-gap;
+}
+
+@mixin item-alignment {
+  display: inline-flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+@mixin input-alignment {
+  display: inline-flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  align-items: center;
+}
+
+@mixin item-measurement(
+  $min-width: $default-min-width-icon,
+  $padding: false,
+  $size: "md",
+  $comp: "button"
+) {
+  @include set-text-font(get-item-font-size($size), "semiBold");
+
+  height: get-item-height($size);
+  min-width: $min-width;
+  padding: if($padding, $padding, get-item-padding($size));
+  border-radius: get-item-radius($comp);
+  gap: get-item-gap($size);
+  > svg {
+    height: 20px;
+    width: 20px;
+  }
+}
+
+@mixin set-input-measurement($size) {
+  width: get-input-measurements($size, "width");
+  max-height: get-input-measurements($size, "height");
+  padding: get-input-measurements($size, "padding");
+  border-radius: get-item-radius("input");
+  gap: get-item-gap($size);
+}
+
+
+@mixin icon-placeholder($size, $comp) {
+  height: get-icon-placeholder($size, $comp);
+  width: get-icon-placeholder($size, $comp);
+}
+
+@mixin set-stretch() {
+  width: 100%;
+}

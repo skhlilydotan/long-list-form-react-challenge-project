@@ -1,0 +1,190 @@
+@import "@common/styles/_basecolors.module.scss";
+@import "@common/styles/_functions.module.scss";
+@import "@common/styles/_shadow.module.scss";
+
+$state-selectors: (
+        "default": false,
+        "hover": "&:hover, &:active",
+        "focused":"&:focus-visible, &[data-state=\"open\"], &:focus",
+        "disabled":"&[disabled], &[disabled]:hover, &[disabled]:focus, &[disabled]:focus-visible"
+);
+
+$hierarchy: (
+        "primary": (
+                "prfx": "primary",
+                "state": (
+                        "default": ("color": baseWhite, "background-color": 600, "border-color": 600),
+                        "hover": ("color": baseWhite, "background-color": 700, "border-color": 700),
+                        "focused": ("color": baseWhite, "background-color": 600, "border-color": 600, "box-shadow":100),
+                        "disabled": ("color": baseWhite, "background-color": 200, "border-color": 200)
+                )),
+        "secondaryGray": (
+                "prfx": "gray",
+                "state": (
+                        "default": ("color": 700, "background-color": baseWhite, "border-color": 300),
+                        "hover": ("color": 800, "background-color": 50, "border-color": 300),
+                        "focused": ("color": 700, "background-color": baseWhite, "border-color": 300, "box-shadow":100),
+                        "disabled": ("color": 300, "background-color": baseWhite, "border-color": 200)
+                )),
+        "secondaryColor":(
+                "prfx": "primary",
+                "state": (
+                        "default": ("color": 700, "background-color": 50, "border-color": 50),
+                        "hover": ("color": 800, "background-color": 100, "border-color": 100),
+                        "focused": ("color": 700, "background-color": 50, "border-color": 50, "box-shadow":100),
+                        "disabled": ("color": 300, "background-color": 25, "border-color": 25)
+                )),
+        "tertiaryGray": (
+                "prfx": "gray",
+                "state": (
+                        "default": ("color": 600, "background-color": baseTransparent, "border-color": baseTransparent),
+                        "hover": ("color": 700, "background-color": 50, "border-color": baseTransparent),
+                        "focused": ("color": 600, "background-color": baseTransparent, "border-color": baseTransparent),
+                        "disabled": ("color": 300, "background-color": baseTransparent, "border-color": baseTransparent)
+                )),
+        "tertiaryColor": (
+                "prfx": "primary",
+                "state": (
+                        "default": ("color": 700, "background-color": baseTransparent, "border-color": baseTransparent),
+                        "hover": ("color": 600, "background-color": 50, "border-color": baseTransparent),
+                        "focused": ("color": 700, "background-color": baseTransparent, "border-color": baseTransparent),
+                        "disabled": ("color": 300, "background-color": baseTransparent, "border-color": baseTransparent)
+                ))
+);
+
+
+@function get-selector-state($state) {
+  @return map-get($state-selectors, $state);
+}
+
+@function get-type-map($type) {
+  @return map-deep-get($hierarchy, $type);
+}
+
+@function get-state-map($type) {
+  @return map-deep-get(get-type-map($type), "state");
+}
+
+@function get-state-values($type, $state) {
+  @return map-get(get-state-map($type), quote($state));
+}
+
+@function get-attr($type, $state, $attr) {
+  @return map-get(get-state-values($type, $state), $attr);
+}
+
+@function get-color($type, $state, $attr, $destructive: false) {
+  $type-map: get-type-map($type);
+  $prfx: if($destructive, "error", map-get($type-map, "prfx"));
+  $color: get-attr($type, $state, $attr);
+  $exclude-colors: baseWhite, baseTransparent;
+  @return color(if(index($exclude-colors, $color), $color, "#{$prfx}#{$color}"));
+}
+
+@mixin set-box-shadow($color) {
+  box-shadow: get-shadow("xs"), get-focus-ring-with-color($color);
+}
+
+@mixin set-icon-color( $color, $stroke: false, $fill: false) {
+  * > svg, > svg {
+
+    fill: none;
+    stroke: none;
+
+    @if $fill {
+      fill: $color;
+    }
+    @if $stroke {
+      stroke: $color;
+    }
+  }
+}
+
+@mixin set-type-effect($background-color: false, $color: false) {
+  @if $background-color {
+    background-color: $background-color;
+  }
+  color: $color;
+
+  > svg {
+    fill: $color;
+  }
+
+  * {
+    @if $background-color {
+      background-color: $background-color;
+    }
+    color: $color;
+  }
+
+  * > svg {
+    fill: $color;
+  }
+}
+
+
+@function get-border($border-color: color(gray200)) {
+  @return 1px solid $border-color;
+}
+
+@mixin set-border($border-color) {
+  border: get-border($border-color);
+}
+
+@mixin set-focus-outline($outline: unset) {
+  outline: $outline;
+}
+
+@mixin set-state($type, $state, $destructive: false) {
+  $state-map: get-state-values($type, $state);
+  @if ($state == "focused") {
+    @include set-focus-outline;
+  }
+
+  @each $attr, $value in $state-map {
+    $color-value: get-color($type, $state, $attr, $destructive);
+    @if ($attr == "box-shadow") {
+      @include set-box-shadow($color-value);
+    } @else if ($attr == "border-color") {
+      @include set-border($color-value);
+    } @else {
+      #{$attr}: $color-value;
+    }
+  }
+}
+
+
+@mixin build-type(
+  $type,
+  $destructive: false
+) {
+  $state-map: get-state-map($type);
+  @each $state, $value in $state-map {
+    $selector: get-selector-state($state);
+    @if $selector {
+      #{unquote($selector)} {
+        @include set-state($type, $state, $destructive);
+      }
+    } @else {
+      @include set-state($type, $state, $destructive);
+    }
+  }
+}
+
+@mixin build-icon-skin(
+  $type,
+  $stroke: false,
+  $destructive: false
+) {
+  $state-map: get-state-map($type);
+  @each $state, $value in $state-map {
+    $selector: get-selector-state($state);
+    @if $selector {
+      #{unquote($selector)} {
+        @include set-icon-color(get-color($type, $state, "color", $destructive), $stroke: $stroke, $fill: (not $stroke));
+      }
+    } @else {
+      @include set-icon-color(get-color($type, $state, "color", $destructive), $stroke: $stroke, $fill: (not $stroke));
+    }
+  }
+}

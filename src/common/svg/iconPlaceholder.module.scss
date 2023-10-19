@@ -1,0 +1,51 @@
+@import "src/common/styles/_item.module.scss";
+@import "src/common/styles/_skin.module.scss";
+@import "src/common/styles/_skin_input.module.scss";
+
+.placeHolder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  > svg {
+    vertical-align: unset;
+  }
+}
+
+.showCursor {
+  cursor: pointer;
+}
+
+@each $size, $value in $icon-placeholder {
+  .#{unquote($size)} {
+    @include icon-placeholder($size, "button");
+
+    &.icon {
+      @include icon-placeholder($size, "icon");
+    }
+  }
+}
+
+
+@each $skin, $value in $hierarchy {
+  .#{unquote($skin)}.#{unquote($skin)} {
+    @include build-icon-skin($type: $skin, $stroke: true, $destructive: false);
+  }
+}
+
+
+@each $skin, $value in $hierarchy {
+  $selector: ".#{$skin}Destructive.#{$skin}Destructive";
+  #{unquote($selector)} {
+    @include build-icon-skin($type: quote($skin), $stroke: true, $destructive: true);
+  }
+}
+
+
+.inputStroke {
+  @include build-icon-skin-input($stroke: true, $destructive: false);
+}
+
+.inputStrokeDestructive {
+  @include build-icon-skin-input($stroke: true, $destructive: true);
+}

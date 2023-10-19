@@ -1,0 +1,21 @@
+@import "src/common/styles/_typography.module.scss";
+
+$_texts-font-sizes: get-comp-map(map-get($typography-properties, "sizes"), "text", "fontSize");
+$_texts-font-line-heights: get-comp-map(map-get($typography-properties, "sizes"), "text", "lineHeight");
+
+
+@each $name, $value in $_texts-font-line-heights {
+  .#{$name}.#{$name} {
+    line-height: $value;
+  }
+}
+
+@each $name, $font-size in $_texts-font-sizes {
+  .#{$name}.#{$name} {
+    font-size: $font-size;
+  }
+}
+
+.font.font {
+  font-family: $font-text;
+}

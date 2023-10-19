@@ -1,0 +1,24 @@
+@import "src/common/styles/_typography.module.scss";
+@import "../styles/basecolors.module";
+
+@each $name, $weight in $font-weights {
+  .#{$name}.#{$name} {
+    font-weight: $weight;
+  }
+}
+
+.defaultColor {
+  color: color(gray900);
+}
+
+.disabled {
+  color: color(gray400);
+}
+
+.inline {
+  display: inline;
+}
+
+.label {
+  margin-bottom: unset;
+}

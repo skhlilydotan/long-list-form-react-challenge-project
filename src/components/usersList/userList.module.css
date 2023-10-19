@@ -1,0 +1,22 @@
+.rightButtonContainer {
+    margin-left: auto;
+}
+
+
+.usersListContent {
+    height: 400px;
+    padding: 15px;
+}
+
+.userRow {
+    gap: 8px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.userRowInput {
+    width: 230px;
+}

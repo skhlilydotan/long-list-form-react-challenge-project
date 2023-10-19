@@ -1,0 +1,39 @@
+@import "@common/styles/_typography.module.scss";
+
+.input.input {
+  font-family: $font-text;
+  border: none;
+  outline: none;
+  width: 100%;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Works for Firefox */
+  :global(input[type="number"] ) {
+    cursor: pointer;
+  }
+}
+
+.container.container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  &.inline {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.icon {
+  display: flex;
+}
+
+.stretch.stretch {
+  width: 100%;
+}
+
