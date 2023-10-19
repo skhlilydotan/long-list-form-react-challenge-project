@@ -1,43 +1,82 @@
-import { createAsyncThunk, createEntityAdapter, createSlice } from '@reduxjs/toolkit';
-import { v4 as uuidv4 } from 'uuid';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import initialUsersData from '@/data/initialUsersData.json';
 
-const usersAdapter = createEntityAdapter();
+const LOADING_STATES = {
+  IDLE: 'IDLE',
+  LOADING: 'LOADING',
+  SUCCEEDED: 'SUCCEEDED',
+  ERROR: 'ERROR',
+};
 
-function generateUniqueId() {
-  return uuidv4();
-}
+export const loadState = (key) => {
+  try {
+    const serializedState = localStorage.getItem(key);
+    if (!serializedState) {
+      return null;
+    }
+    return JSON.parse(serializedState);
+  } catch (err) {
+    return null;
+  }
+};
+const fetchUsers = createAsyncThunk(
+  'users/fetchUsers',
+  async (_, { rejectWithValue }) => {
+    try {
+      // Simulating an async operation
+      return await new Promise((resolve) =>
+        setTimeout(() => resolve(loadState('usersData') || initialUsersData), 500),
+      );
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  },
+);
 
-
-// export const createUser = createAsyncThunk(
-//   'users/addUser',
-// );
+const saveUsers = createAsyncThunk(
+  'users/saveUsers',
+  async ({ users }, { rejectWithValue, getState }) => {
+    try {
+      localStorage.setItem('usersData', JSON.stringify(users));
+      return users;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  },
+);
 
 
 export const usersSlice = createSlice({
   name: 'users',
-  initialState: [],
-  reducers: {
-    setUsers: (state, action) => action.payload,
-    editUser: (state, action) => {
-      const userToEdit = state.find(user => user.id === action.payload.id);
-      if (userToEdit) {
-        Object.assign(userToEdit, action.payload.changes);
-      }
-    },
-    deleteUser: (state, action) => {
-      return state.filter(user => user.id !== action.payload.id);
-    },
-    addUser: (state) => {
-      return [{
-        id: generateUniqueId(),
-        name: '',
-        country: '',
-        email: '',
-        phone: '',
-      }, ...state];
-    },
+  initialState: { data: [], status: LOADING_STATES.IDLE, error: null },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUsers.pending, (state) => {
+        state.status = LOADING_STATES.LOADING;
+      })
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.status = LOADING_STATES.SUCCEEDED;
+        state.data = action.payload;
+      })
+      .addCase(fetchUsers.rejected, (state, action) => {
+        state.status = LOADING_STATES.ERROR;
+        state.error = action.payload;
+      })
+      .addCase(saveUsers.pending, (state) => {
+        state.status = LOADING_STATES.LOADING;
+      })
+      .addCase(saveUsers.fulfilled, (state, action) => {
+        state.status = LOADING_STATES.SUCCEEDED;
+        state.data = action.payload;
+      })
+      .addCase(saveUsers.rejected, (state, action) => {
+        state.status = LOADING_STATES.ERROR;
+        state.error = action.payload;
+      });
   },
 });
-export const getUsers = state => state.users;
-export const { setUsers, editUser, deleteUser, addUser } = usersSlice.actions;
+const getUsers = state => state.users.data;
+const getState = state => state.users.status;
+export { getState, getUsers, fetchUsers, saveUsers, LOADING_STATES };
 export default usersSlice.reducer;

@@ -4,7 +4,7 @@ import { Link as RouterLink } from 'react-router-dom';
 function NavBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position='static'>
         <Toolbar
           sx={{
             display: 'flex',
@@ -15,10 +15,13 @@ function NavBar() {
             boxShadow: '0 0 1rem rgba(0, 0, 0, 0.2)',
           }}
         >
-          <Button component={RouterLink} to="/" color="inherit">
+          <RouterLink to='/'>
+            Go Home
+          </RouterLink>
+          <Button component={RouterLink} to='/' color='inherit'>
             Statistics
           </Button>
-          <Button component={RouterLink} to="/users" color="inherit">
+          <Button component={RouterLink} to='/users' color='inherit'>
             Users
           </Button>
         </Toolbar>

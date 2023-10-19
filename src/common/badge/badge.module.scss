@@ -1,0 +1,98 @@
+@import "@common/styles/_basecolors.module.scss";
+
+@mixin set-color($backgroundColor, $textColor) {
+  background-color: $backgroundColor;
+  color: $textColor;
+}
+
+
+@mixin set-svg-stroke-color($color) {
+  * > svg {
+    stroke: $color;
+  }
+}
+
+@mixin set-placeholder-size($size) {
+  [role="icon-placeholder"] {
+    height: $size;
+    width: $size;
+  }
+}
+
+$badge-sizes: (
+        "default": (
+                "sm": ("padding": "2px 8px"),
+                "md": ("padding": "2px 10px"),
+                "lg": ("padding": "4px 12px"),
+        ),
+        "xClose": (
+                "sm": ("padding": "2px 6px 2px 8px"),
+                "md": ("padding": "2px 8px 2px 10px"),
+                "lg": ("padding": "4px 10px 4px 12px"),
+        ),
+        "iconTrailing": (
+                "sm": ("padding": "2px 6px 2px 8px"),
+                "md": ("padding": "2px 6px 2px 10px"),
+                "lg": ("padding": "4px 10px 4px 12px"),
+        ),
+        "iconLeading": (
+                "sm": ("padding": "2px 8px 2px 6px"),
+                "md": ("padding": "2px 10px 2px 8px"),
+                "lg": ("padding": "4px 12px 4px 10px"),
+        ),
+);
+
+.text {
+  color: inherit;
+}
+
+.badgeContainer {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  border-radius: 16px;
+  width: fit-content;
+}
+
+@each $style, $sizes in $badge-sizes {
+  .#{unquote($style)} {
+    @each $size, $values in $sizes {
+      &.#{unquote($size)} {
+        @each $property, $value in $values {
+          #{unquote($property)}: unquote($value);
+        }
+      }
+    }
+  }
+}
+
+.xClose, .iconTrailing, .iconLeading {
+  gap: 4px;
+  @include set-placeholder-size(12px);
+}
+
+
+.color-gray {
+  @include set-color($backgroundColor: color(gray100), $textColor: color(gray700));
+  @include set-svg-stroke-color($color: color(gray700));
+}
+
+.color-primary {
+  @include set-color($backgroundColor: color(primary50), $textColor: color(primary700));
+  @include set-svg-stroke-color($color: color(primary500));
+}
+
+.color-error {
+  @include set-color($backgroundColor: color(error50), $textColor: color(error700));
+  @include set-svg-stroke-color($color: color(error500));
+}
+
+.color-warning {
+  @include set-color($backgroundColor: color(warning50), $textColor: color(warning700));
+  @include set-svg-stroke-color($color: color(warning500));
+}
+
+.color-success {
+  @include set-color($backgroundColor: color(success50), $textColor: color(success700));
+  @include set-svg-stroke-color($color: color(success500));
+}

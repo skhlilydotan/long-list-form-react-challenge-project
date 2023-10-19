@@ -1,26 +1,27 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import NavBar from './components/NavBar';
 import StatisticsPage from './pages/statistics/StatisticsPage';
 import UsersPage from './pages/users/UsersPage';
-import { setUsers } from '@slices/usersSlice';
-import data from '@/data/initialUsersData.json';
+import { fetchUsers } from '@slices/usersSlice';
+import { MainLayout } from '@layouts/mainLayout';
+import styles from './app.module.scss';
 
 function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setUsers(data));
+    dispatch(fetchUsers());
   }, [dispatch]);
-
+  // if (status !== 'loading') return <div>Loading...</div>;
   return (
     <BrowserRouter>
-      <NavBar />
-      <Routes>
-        <Route path='/' exact element={<StatisticsPage />} />
-        <Route path='users' element={<UsersPage />} />
-      </Routes>
+      <MainLayout className={styles.app}>
+        <Routes>
+          <Route path='/' exact element={<StatisticsPage />} />
+          <Route path='users' element={<UsersPage />} />
+        </Routes>
+      </MainLayout>
     </BrowserRouter>
 
   );

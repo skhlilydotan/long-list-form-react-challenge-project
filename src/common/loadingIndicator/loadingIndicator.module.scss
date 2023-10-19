@@ -1,0 +1,103 @@
+@import "@common/styles/_basecolors.module.scss";
+//@import "frontend/common/constants/_spacers.module.scss";
+
+$sizes-container: (
+        "sm": ("height": "32px", "width": "32px", "border-width": "4px"),
+        "md": ("height": "48px", "width": "48px", "border-width": "6px"),
+        "lg": ("height": "56px", "width": "56px", "border-width": "6px"),
+        "xl": ("height": "64px", "width": "64px", "border-width": "8px"),
+);
+
+$line-edge-width: (
+        "sm": "4px",
+        "md": "6px",
+        "lg": "6px",
+        "xl": "8px",
+);
+
+$li-edges-left: (
+        "md": ("left": "0.6px"),
+        "lg": ("left": "1.5px", "top": "1px"),
+        "xl": ("top": "0.5px")
+);
+
+$li-edges-right: (
+        "sm": ("right": "0"),
+        "md": ("right": "0.3px"),
+        "lg": ("right": "1px", "top": "1.2px"),
+        "xl": ("right": "0", "top": "0.5px")
+);
+
+@each $size, $value in $line-edge-width {
+  .#{unquote("#{$size}EdgeWidth")} {
+    width: unquote($value);
+    height: unquote($value);
+  }
+}
+
+@each $size, $values in $li-edges-right {
+  .#{unquote("#{$size}EdgeRight")} {
+    @each $prop, $value in $values {
+      #{unquote($prop)}: unquote($value);
+    }
+  }
+}
+
+
+@each $size, $values in $li-edges-left {
+  .#{unquote("#{$size}EdgeLeft")} {
+    @each $prop, $value in $values {
+      #{unquote($prop)}: unquote($value);
+    }
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.circleContainer {
+  position: relative;
+  @each $size, $values in $sizes-container {
+    .#{$size}.#{$size} {
+      @each $property, $value in $values {
+        #{unquote($property)}: unquote($value);
+      }
+    }
+  }
+}
+
+.loading {
+  display: block;
+  position: relative;
+  border-radius: 50%;
+}
+
+.lineSimple {
+  border: solid color(gray100);
+  border-top-color: color(primary600);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.edge {
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  background: color(primary600);
+}
+
+.text {
+  padding-top: 16px;
+}

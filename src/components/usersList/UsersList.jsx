@@ -1,76 +1,170 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { List } from 'react-virtualized';
-import _sortBy from 'lodash/sortBy';
 import { UserRow } from './UserRow.jsx';
 import { Card } from '@common/card/index.js';
 import { Button } from '@common/button/index.js';
 import { ICONS } from '@common/svg';
-import { createRef, useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { useResizeObserver } from '@hooks';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Container } from '@common/container';
 import styles from './userList.module.css';
-import { SKINS } from '@common/constants';
-import { getUsers, addUser, editUser } from '@slices/usersSlice';
+import { SIZES, SKINS } from '@common/constants';
+import { getState, getUsers, saveUsers, LOADING_STATES } from '@slices/usersSlice';
+import { transformUsers, unTransformUsers, validateFields, initNewUser } from './utils';
+import { USER_FIELDS } from '@constants';
+import { validateInList } from '@utils/validation';
+import { getCountries } from '@slices/countriesSlice';
+import { Badge, BADGE_COLORS } from '@common/badge';
+import { USER_FIELDS_VALIDATION } from '@components/usersList/constants.js';
+import { INPUT_CONTENT_TYPE, INPUT_TYPES, TextInput } from '@common/inputs/index.js';
+import { LoadingIndicator } from '@common/loadingIndicator';
+import { EmptyState } from '@common/emptyState/index.js';
 
 const UsersList = () => {
-  const [, forceUpdate] = useState();
-  const dispatch = useDispatch();
-  const usersData = useSelector(getUsers);
-  // const contentRef = useRef(null);
   const ListRef = useRef(null);
-  // const { height: contentHeight } = useResizeObserver({
-  //   ref: contentRef,
-  //   forceTrigger: true,
-  // });
+  const dispatch = useDispatch();
+  const status = useSelector(getState);
+  const usersData = useSelector(getUsers);
+  const countries = useSelector(getCountries);
+  const [searchTerm, setSearchTerm] = useState(null);
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    setUsers(transformUsers(usersData));
+  }, [usersData]);
 
-  // const usersData = useMemo(() => {
-  //   console.log('users', users);
-  //   return _sortBy(users, ['isNew']);
-  // }, [users]);
+  const filteredUsers = useMemo(() => {
+    if (searchTerm) {
+      return users?.filter(user =>
+        Object.values(user).some(item =>
+          String(item.value).toLowerCase().includes(searchTerm.toLowerCase()),
+        ),
+      );
+    }
+    return users;
+  }, [users, searchTerm]);
 
-  const handleEdit = (userId, changes) => {
-    dispatch(editUser({ id: userId, changes }));
-  };
-  const handleAdd = () => {
-    dispatch(addUser());
-    setTimeout(() => {
-      ListRef.current.forceUpdate();
-      ListRef.current.scrollToRow(0);
-    }, 10);
-  };
-  const rowRenderer = ({ index, key, style }) => {
-    const user = usersData[index];
+  const enableSave = useMemo(() => {
+
+  }, []);
+
+  const summary = useMemo(() => {
+    const counts = users.reduce(
+      (acc, user) => {
+        Object.keys(user).forEach((key) => {
+          if (USER_FIELDS_VALIDATION.includes(key)) {
+            if (user[key].error) acc.invalid++;
+            if (user[key].empty && !user[key].isNew) acc.empty++;
+            if (user[key].isNew) acc.isNew++;
+          }
+        });
+        return acc;
+      },
+      { invalid: 0, empty: 0, isNew: 0 },
+    );
+    return { total: users.length, empty: counts.empty, invalid: counts.invalid, isNew: counts.isNew };
+  }, [users]);
+
+  const handleSave = useCallback(() => {
+    dispatch(saveUsers({ users: unTransformUsers(users) }));
+  }, [dispatch, users]);
+
+  const handleChange = useCallback((e, index, field) => {
+    const value = e.target.value;
+    let error = false;
+    const empty = value === '';
+
+    if (!empty) {
+      switch (field) {
+        case USER_FIELDS.NAME:
+        case USER_FIELDS.PHONE:
+        case USER_FIELDS.EMAIL:
+          error = !validateFields(field, value);
+          break;
+        case USER_FIELDS.COUNTRY:
+          error = !validateInList(value, countries);
+          break;
+        default:
+          break;
+      }
+    }
+
+    setUsers((prevUsers) => {
+      const updatedUsers = [...prevUsers];
+      updatedUsers[index][field] = { value, error, empty, isNew: false };
+      return updatedUsers;
+    });
+  }, [setUsers, countries]);
+
+  const handleAdd = useCallback(() => {
+    setUsers((prevUsers) => ([initNewUser(), ...prevUsers]));
+    ListRef.current.forceUpdate();
+    ListRef.current.scrollToRow(0);
+  }, [setUsers]);
+
+  const handleDelete = useCallback((id) => (
+    setUsers((prevUsers) => [...prevUsers.filter(user => user.id.value !== id)])
+  ), [setUsers]);
+
+  const rowRenderer = useCallback(({ index, key, style }) => {
+    const user = filteredUsers[index];
     return (
       <div key={key} className={styles.userRow} style={style}>
-        <UserRow user={user} />
+        <UserRow user={user} index={index} onChange={handleChange} onDelete={handleDelete} />
       </div>
     );
-  };
+  }, [filteredUsers, handleChange, handleDelete]);
+
+  const onSearch = useCallback((e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+  }, [setSearchTerm]);
+
+  const renderList = () => (usersData.length ? <List
+      ref={ListRef}
+      width={1200}
+      height={400}
+      rowCount={filteredUsers?.length}
+      rowHeight={46}
+      scrollToAlignment='center'
+      rowRenderer={rowRenderer}
+      overscanRowCount={30}
+    /> : <EmptyState />
+
+  );
 //TODO: fix Icon
   return (
     <Container>
       <Card>
         <Card.Header title='Users List'>
-          <Button buttonType={SKINS.SECONDARY_GRAY} label='Save' />
-          <Button buttonType={SKINS.PRIMARY} onClick={handleAdd}>
-            <Button.Icon iconName={ICONS.PLUS} />
-            <Button.Text value='Add user' />
-          </Button>
-        </Card.Header>
-        {usersData &&
-          <div className={styles.usersListContent}>
-            <List
-              ref={ListRef}
-              width={1200}
-              height={400}
-              rowCount={usersData?.length}
-              rowHeight={46}
-              scrollToAlignment='center'
-              scrollToRow={30}
-              rowRenderer={rowRenderer}
-              overscanRowCount={30}
+          <div className={styles.badgeContainer}>
+            <Badge text={`${summary.total} Users`} />
+            <Badge text={`${summary.empty} Empty fields`} color={BADGE_COLORS.WARNING} />
+            <Badge text={`${summary.invalid} Invalid fields`} color={BADGE_COLORS.ERROR} />
+          </div>
+          <div className={styles.actionsContainer}>
+            <TextInput
+              className={styles.userRowInput}
+              value=''
+              inline
+              placeholder='Search'
+              size={SIZES.SM}
+              valueType={INPUT_CONTENT_TYPE.TEXT}
+              type={INPUT_TYPES.SEARCH}
+              onBlur={onSearch}
             />
-          </div>}
+            <Button buttonType={SKINS.SECONDARY_GRAY} label='Save' onClick={handleSave}
+                    disabled={Boolean(summary.isNew || summary.empty || summary.invalid)} />
+            <Button buttonType={SKINS.PRIMARY} onClick={handleAdd}>
+              <Button.Icon iconName={ICONS.PLUS} />
+              <Button.Text value='Add user' />
+            </Button>
+          </div>
+        </Card.Header>
+
+
+        <div className={styles.usersListContent}>
+          {status === LOADING_STATES.LOADING ? <LoadingIndicator value='Loading...' /> : renderList()
+          }
+        </div>
       </Card>
     </Container>
   );

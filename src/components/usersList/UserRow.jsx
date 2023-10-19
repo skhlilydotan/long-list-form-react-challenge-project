@@ -1,16 +1,16 @@
-import TrashIconButton from '@components/TrashIconButton.jsx';
+import { useCallback } from 'react';
 import PropTypes from 'prop-types';
-
-
-// user country must be one of those - for select/autocomplete implementation
-import countryOptions from '../../data/countries.json';
-import styles from './userList.module.css';
+import TrashIconButton from '@components/TrashIconButton.jsx';
+import { USER_FIELDS } from '@constants';
 import { InputField } from './InputField.jsx';
 
 const propTypes = {
+  index: PropTypes.number,
+  onChange: PropTypes.func,
+  onDelete: PropTypes.func,
   user: PropTypes.objectOf(PropTypes.shape({
-    id: PropTypes.string,
     isNew: PropTypes.bool,
+    id: PropTypes.bool,
     name: PropTypes.string,
     country: PropTypes.string,
     email: PropTypes.string,
@@ -18,16 +18,25 @@ const propTypes = {
   })),
 };
 
-const UserRow = ({ user }) => {
+const UserRow = ({ user, index, onChange, onDelete }) => {
+
+  const handleRemove = useCallback(() => {
+    onDelete(user[USER_FIELDS.ID].value);
+  }, [user, onDelete]);
+
   return (
     <>
-      <InputField value={user?.name} />
-      <InputField value={user?.country} />
-      <InputField value={user?.email} />
-      <InputField value={user?.phone} />
-      <TrashIconButton />
+      <InputField entity={user} index={index} onChange={onChange} fieldType={USER_FIELDS.NAME} />
+      <InputField entity={user} index={index} onChange={onChange}
+                  fieldType={USER_FIELDS.COUNTRY} />
+      <InputField entity={user} index={index} onChange={onChange}
+                  fieldType={USER_FIELDS.EMAIL} />
+      <InputField entity={user} index={index} onChange={onChange}
+                  fieldType={USER_FIELDS.PHONE} />
+      <TrashIconButton handleClick={handleRemove} />
     </>
   );
 };
+
 UserRow.propTypes = propTypes;
 export { UserRow };

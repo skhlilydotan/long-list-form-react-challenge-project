@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useLayoutEffect, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useInputContext } from './inputContext';
 import classes from './input.module.scss';
@@ -20,8 +20,6 @@ const defaultProps = {
   },
   onChange: () => {
   },
-  onKeyDown: () => {
-  },
   placeholder: '',
 };
 
@@ -41,11 +39,12 @@ const Input = forwardRef(
   ) => {
     const { value, valueType } = useInputContext();
     const [inputVal, setInputVal] = useState(String(value));
-    
+
 
     useLayoutEffect(() => {
       setInputVal(value);
     }, [value]);
+
 
     const handleOnChange = useCallback(
       (event) => {
@@ -55,6 +54,14 @@ const Input = forwardRef(
       [onChange],
     );
 
+    const handleKeyPress = useCallback((event) => {
+      if (onBlur && event.key === 'Enter') {
+        event.preventDefault();
+        onBlur(event);
+      }
+    }, [onBlur]);
+
+
     return (
       <input
         data-testid={dataTestId}
@@ -63,11 +70,11 @@ const Input = forwardRef(
         id={id}
         type={valueType || 'text'}
         placeholder={placeholder}
-        defaultValue={inputVal}
+        value={inputVal}
         onFocus={onFocus}
         onChange={handleOnChange}
         onBlur={onBlur}
-        onKeyDown={onKeyDown}
+        onKeyDown={onKeyDown || handleKeyPress}
         {...rest}
       />
     );

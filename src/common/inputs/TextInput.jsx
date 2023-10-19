@@ -50,40 +50,55 @@ const TextInput = React.forwardRef(
       error,
       stretch,
       destructive,
+      onFocus,
+      onBlur,
+      onChange,
+      onKeyDown,
+      placeholder,
       ...contentProps
     },
     forwardRef,
-  ) => (
-    <div
-      className={classnames(
-        classes.container,
-        { [classes.inline]: inline },
-        className,
-      )}
-    >
-      {label && <Label htmlFor={id} label={label} />}
-      <Content
-        id={id}
-        destructive={!!error || destructive}
-        ref={forwardRef}
-        className={className}
-        size={size}
-        type={type}
-        stretch={stretch}
-        {...contentProps}
-      >
-        {iconName && (
-          <Content.Icon
-            placeholderSize={SIZES.SM}
-            iconName={iconName}
-          />
+  ) => {
+    return (
+      <div
+        className={classnames(
+          classes.container,
+          { [classes.inline]: inline },
+          className,
         )}
-        <Content.Input dataTestId={dataTestId} id={id} />
-      </Content>
-      {error && <LabelError label={error} />}
-    </div>
-  ),
-);
+      >
+        {label && <Label htmlFor={id} label={label} />}
+        <Content
+          id={id}
+          destructive={!!error || destructive}
+          ref={forwardRef}
+          className={className}
+          size={size}
+          type={type}
+          stretch={stretch}
+          {...contentProps}
+        >
+          {iconName && (
+            <Content.Icon
+              placeholderSize={SIZES.SM}
+              iconName={iconName}
+            />
+          )}
+          <Content.Input
+            dataTestId={dataTestId}
+            id={id}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
+            placeholder={placeholder}
+          />
+        </Content>
+        {error && <LabelError label={error} />}
+      </div>
+
+    );
+  });
 
 TextInput.displayName = 'TextInput';
 TextInput.propTypes = propTypes;

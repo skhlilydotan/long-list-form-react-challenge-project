@@ -41,12 +41,15 @@ export default defineConfig({
   plugins: [react(), svgr(), svgLoader(), reactVirtualized(), vitePluginRequire.default()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),  // Alias for src directory
-      '@common': path.resolve(__dirname, './src/common'),  // Alias for src directory
-      '@components': path.resolve(__dirname, './src/components'),  // Alias for src directory
-      '@hooks': path.resolve(__dirname, './src/hooks'),  // Alias for src directory
-      '@redux': path.resolve(__dirname, './src/redux'),  // Alias for src directory
-      '@slices': path.resolve(__dirname, './src/redux/slices'),  // Alias for src directory
+      '@': path.resolve(__dirname, './src'),
+      '@common': path.resolve(__dirname, './src/common'),
+      '@components': path.resolve(__dirname, './src/components'),
+      '@hooks': path.resolve(__dirname, './src/hooks'),
+      '@redux': path.resolve(__dirname, './src/redux'),
+      '@slices': path.resolve(__dirname, './src/redux/slices'),
+      '@utils': path.resolve(__dirname, './src/utils'),
+      '@constants': path.resolve(__dirname, './src/constants'),
+      '@layouts': path.resolve(__dirname, './src/layouts'),
       // Add more aliases as required
     },
   },

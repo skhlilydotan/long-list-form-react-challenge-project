@@ -47,12 +47,27 @@ $error_colors: (
         error900: #7a271a,
 );
 
+$warning_colors: (
+        warning25: #FFFCF5,
+        warning50: #FFFAEB,
+        warning100: #FEF0C7,
+        warning200: #FEDF89,
+        warning300: #FEC84B,
+        warning400: #FDB022,
+        warning500: #F79009,
+        warning600: #DC6803,
+        warning700: #B54708,
+        warning800: #93370D,
+        warning900: #7A2E0E,
+);
+
 
 $colors_merge1: map_merge($base_colors, $gray_colors);
 $colors_merge2: map_merge($colors_merge1, $primary_colors);
 $colors_merge3: map_merge($colors_merge2, $error_colors);
+$colors_merge4: map_merge($colors_merge3, $warning_colors);
 
-$colors: $colors_merge3;
+$colors: $colors_merge4;
 
 @function color($color) {
   @return map-get($colors, $color);

@@ -4,8 +4,27 @@
 
 
 .usersListContent {
+    display: flex;
+    align-items: center;
     height: 400px;
+    width: 1230px;
     padding: 15px;
+    justify-content: center;
+}
+
+.actionsContainer, .badgeContainer {
+    gap: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.badgeContainer {
+    margin-right: auto;
+}
+
+.actionsContainer {
+    margin-left: auto;
 }
 
 .userRow {

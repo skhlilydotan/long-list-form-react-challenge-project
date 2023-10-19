@@ -11,15 +11,16 @@ const StyledIconButton = styled(IconButton)({
 
 const TrashIconButton = ({ handleClick }) => {
   return (
-    <StyledIconButton aria-label="delete" size="large">
-      <DeleteIcon fontSize="inherit" />
+    <StyledIconButton aria-label='delete' size='large' onClick={handleClick}>
+      <DeleteIcon fontSize='inherit' />
     </StyledIconButton>
   );
 };
 
 // TODO: Implement passed props
 TrashIconButton.defaultProps = {
-  handleClick: () => {},
+  handleClick: () => {
+  },
 };
 
 export default TrashIconButton;
