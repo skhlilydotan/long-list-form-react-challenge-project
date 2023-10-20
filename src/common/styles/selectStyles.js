@@ -1,11 +1,6 @@
 import colors from '@common/styles/colors.module.scss';
 import shadows from '@common/styles/_shadow.module.scss';
 
-/**
- * selectStyles - Style Object for React Select (https://react-select.com/home)
- * Each component is keyed, and ships with default styles. The component's default style object is passed as the first argument to the function when it's resolved.
- * The second argument is the current state of the select, features like isFocused, isSelected etc. allowing you to implement dynamic styles for each of the components.
- */
 export const selectDefaultWidth = 250;
 export const selectTheme = (theme) => ({
   ...theme,

@@ -5,6 +5,7 @@ import { SIZES } from '@common/constants';
 import { USER_FIELDS } from '@constants';
 import styles from './userList.module.css';
 import { USER_FIELDS_PLACEHOLDER } from './constants.js';
+import DOMPurify from 'dompurify';
 
 const propTypes = {
   entity: PropTypes.objectOf(PropTypes.shape({
@@ -29,7 +30,7 @@ const InputField = ({ entity, index, onChange, fieldType }) => {
     <TextInput
       className={styles.userRowInput}
       inline
-      value={value}
+      value={DOMPurify.sanitize(value)}
       placeholder={placeholder}
       destructive={destructive}
       onBlur={handleOnChanged}

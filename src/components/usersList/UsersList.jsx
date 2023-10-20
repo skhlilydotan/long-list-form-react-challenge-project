@@ -1,24 +1,25 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { List } from 'react-virtualized';
-import { UserRow } from './UserRow.jsx';
-import { Card } from '@common/card/index.js';
-import { Button } from '@common/button/index.js';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Container } from '@common/container';
-import styles from './userList.module.css';
-import { SIZES, SKINS } from '@common/constants';
+import DOMPurify from 'dompurify';
 import { getState, getUsers, saveUsers, LOADING_STATES } from '@slices/usersSlice';
-import { transformUsers, unTransformUsers, validateFields, initNewUser } from './utils';
+import { getCountries } from '@slices/countriesSlice';
+import { Card } from '@common/card';
+import { Button } from '@common/button';
+import { Container } from '@common/container';
+import { SIZES, SKINS } from '@common/constants';
 import { USER_FIELDS } from '@constants';
 import { validateInList } from '@utils/validation';
-import { getCountries } from '@slices/countriesSlice';
 import { Badge, BADGE_COLORS } from '@common/badge';
-import { USER_FIELDS_VALIDATION } from '@components/usersList/constants.js';
-import { INPUT_CONTENT_TYPE, INPUT_TYPES, TextInput } from '@common/inputs/index.js';
+import { INPUT_CONTENT_TYPE, INPUT_TYPES, TextInput } from '@common/inputs';
 import { LoadingIndicator } from '@common/loadingIndicator';
-import { EmptyState } from '@common/emptyState/index.js';
+import { EmptyState } from '@common/emptyState';
 import PlusIcon from '@common/assets/icons/plus.svg?react';
 import SearchIcon from '@common/assets/icons/search-lg.svg?react';
+import { transformUsers, unTransformUsers, validateFields, initNewUser } from './utils';
+import { USER_FIELDS_VALIDATION } from './constants';
+import styles from './userList.module.css';
+import { UserRow } from './UserRow.jsx';
 
 const UsersList = () => {
   const ListRef = useRef(null);
@@ -65,12 +66,10 @@ const UsersList = () => {
   }, [dispatch, users]);
 
   const handleChange = useCallback((e, index, field) => {
-    console.log(e, 'e');
-    const value = e.target?.value || e.value;
-    console.log(value, 'value');
+    const value = DOMPurify.sanitize(e.target?.value || e.value);
+    console.log(value);
     let error = false;
     const empty = !value || value === '';
-    console.log(empty, 'empty');
 
     if (!empty) {
       switch (field) {

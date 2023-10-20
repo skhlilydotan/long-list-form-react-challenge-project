@@ -8,6 +8,7 @@ import { getCountries } from '@slices/countriesSlice.js';
 import { Button } from '@common/button';
 import { SIZES, SKINS } from '@common/constants';
 import Trash from '@common/assets/icons/trash-01.svg?react';
+import DOMPurify from 'dompurify';
 
 const propTypes = {
   index: PropTypes.number,
@@ -25,7 +26,10 @@ const propTypes = {
 
 const UserRow = ({ user, index, onChange, onDelete }) => {
   const countries = useSelector(getCountries);
-  const countriesOptions = useMemo(() => countries.map(country => ({ value: country, label: country })), [countries]);
+  const countriesOptions = useMemo(() => countries.map(country => ({
+    value: DOMPurify.sanitize(country),
+    label: DOMPurify.sanitize(country),
+  })), [countries]);
 
   const handleRemove = useCallback(() => {
     onDelete(user[USER_FIELDS.ID].value);
