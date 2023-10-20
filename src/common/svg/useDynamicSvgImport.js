@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-const icons = import.meta.glob('@common/assets/icons/*.svg', { import: 'default', eager: true, as: 'raw' });
+// const icons = import.meta.glob('@common/assets/icons/*.svg', { import: 'default', eager: true, as: 'raw' });
 
 export const useDynamicSvgImport = (name, options = {}) => {
   const ImportedIconRef = useRef();
@@ -12,10 +12,7 @@ export const useDynamicSvgImport = (name, options = {}) => {
     setLoading(true);
     const importIcon = async () => {
       try {
-        console.log('icons:', icons);
         ImportedIconRef.current = await import(`@common/assets/icons/${name}.svg?import&raw&react`).default;
-
-        console.log('import:', ImportedIconRef.current);
         if (onCompleted) {
           onCompleted(name, ImportedIconRef.current);
         }

@@ -13,7 +13,6 @@ function App() {
   useEffect(() => {
     dispatch(fetchUsers());
   }, [dispatch]);
-  // if (status !== 'loading') return <div>Loading...</div>;
   return (
     <BrowserRouter>
       <MainLayout className={styles.app}>

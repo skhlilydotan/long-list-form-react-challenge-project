@@ -1,15 +1,5 @@
-import UsersList from '../../components/usersList/UsersList';
-import PrimaryButton from '../../components/PrimaryButton';
-import styles from './users.module.css';
+import UsersList from '@components/usersList/UsersList';
 
-function UsersPage() {
-  return (
-    <div className={styles.pageRoot}>
-      <div className={styles.pageContentContainer}>
-        <UsersList />
-      </div>
-    </div>
-  );
-}
+const UsersPage = () => <UsersList />;
 
 export default UsersPage;

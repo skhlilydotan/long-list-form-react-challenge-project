@@ -22,8 +22,6 @@ $header-height: 72px;
 .main {
   height: calc($app-height - $header-height);
   display: flex;
+  justify-content: center;
   padding: 110px 0;
-  flex-direction: column;
-  gap: 32px;
-  align-self: stretch;
 }
