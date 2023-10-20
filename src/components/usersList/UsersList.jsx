@@ -65,9 +65,12 @@ const UsersList = () => {
   }, [dispatch, users]);
 
   const handleChange = useCallback((e, index, field) => {
+    console.log(e, 'e');
     const value = e.target?.value || e.value;
+    console.log(value, 'value');
     let error = false;
-    const empty = value === '';
+    const empty = !value || value === '';
+    console.log(empty, 'empty');
 
     if (!empty) {
       switch (field) {

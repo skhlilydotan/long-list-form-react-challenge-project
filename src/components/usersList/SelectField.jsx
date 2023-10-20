@@ -30,16 +30,24 @@ const SelectField = ({ options, entity, index, onChange, fieldType }) => {
     onChange(e, index, fieldType);
   }, [index, onChange, fieldType]);
 
+  const handleOnBlur = useCallback((e) => {
+    if (isNew) {
+      onChange(e, index, fieldType, isNew);
+    }
+  }, [index, isNew, onChange, fieldType]);
+
   return (
     <div className={styles.selectRowInput}>
       <Select
         destructive={destructive}
         placeholder={placeholder}
-        value={selected}
+        value={selected ? selected : null}
+        defaultValue={selected ? selected : null}
         menuPortalTarget={document.body}
         menuPosition={'fixed'}
         isSearchable
         onChange={handleOnChanged}
+        onBlur={handleOnBlur}
         options={options}
 
       />

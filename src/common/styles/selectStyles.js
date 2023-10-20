@@ -72,25 +72,25 @@ export const selectStyles = {
   },
 };
 
+function borderColor(destructive) {
+  return destructive ? colors.error300 : colors.primary300;
+}
+
+function borderShadow(destructive) {
+  return destructive ? colors.error100 : colors.primary100;
+}
+
 export const dropdownStyles = {
   ...selectStyles,
   control: (provided, { isFocused, selectProps }) => {
-    const errorStyle = {
-      boxShadow: selectProps?.destructive
-        ? `0px 0px 0px 1px ${colors.error500}`
-        : null,
-      borderColor: selectProps?.isEmpty ? `${colors.error500}` : null,
-    };
+
     return {
       ...provided,
-      ...(selectProps.destructive ? errorStyle : {}),
-      '&:hover': {
-        ...(selectProps.destructive ? errorStyle : {}),
-      },
+
       width: selectProps?.width || selectDefaultWidth,
       borderRadius: '8px',
-      border: `1px solid ${isFocused ? colors.primary300 : colors.gray300}`,
-      boxShadow: isFocused ? `${shadows.shadowFocusRing} ${colors.primary100} ,${shadows.sm}` : null,
+      border: `1px solid ${isFocused || selectProps?.destructive ? borderColor(selectProps?.destructive) : colors.gray300}`,
+      boxShadow: isFocused ? `${shadows.shadowFocusRing} ${borderShadow(selectProps?.destructive)} ,${shadows.sm}` : null,
     };
   },
   dropdownIndicator: (provided) => ({
