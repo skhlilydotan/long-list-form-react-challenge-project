@@ -1,11 +1,13 @@
 import { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import TrashIconButton from '@components/TrashIconButton.jsx';
 import { USER_FIELDS } from '@constants';
 import { InputField } from './InputField.jsx';
 import { SelectField } from '@components/usersList/SelectField.jsx';
 import { useSelector } from 'react-redux';
 import { getCountries } from '@slices/countriesSlice.js';
+import { Button } from '@common/button';
+import { SIZES, SKINS } from '@common/constants';
+import Trash from '@common/assets/icons/trash-01.svg?react';
 
 const propTypes = {
   index: PropTypes.number,
@@ -38,7 +40,11 @@ const UserRow = ({ user, index, onChange, onDelete }) => {
                   fieldType={USER_FIELDS.EMAIL} />
       <InputField entity={user} index={index} onChange={onChange}
                   fieldType={USER_FIELDS.PHONE} />
-      <TrashIconButton handleClick={handleRemove} />
+      <Button buttonType={SKINS.TERTIARY_GRAY} buttonSize={SIZES.MD} onClick={handleRemove}>
+        <Button.Icon>
+          <Trash />
+        </Button.Icon>
+      </Button>
     </>
   );
 };

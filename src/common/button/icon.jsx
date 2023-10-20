@@ -7,9 +7,10 @@ const propTypes = {
   className: PropTypes.string,
   iconName: PropTypes.string,
   useSkin: PropTypes.bool,
+  children: PropTypes.node,
 };
 
-const Icon = React.forwardRef(({ className, iconName, ...rest }, forwardRef) => {
+const Icon = React.forwardRef(({ className, iconName, children, ...rest }, forwardRef) => {
   const { buttonType, destructive, buttonSize, disabled } = useButtonContext();
 
   return (
@@ -23,7 +24,9 @@ const Icon = React.forwardRef(({ className, iconName, ...rest }, forwardRef) => 
       skin={buttonType}
       placeholderSize={buttonSize}
       {...rest}
-    />
+    >
+      {children}
+    </IconPlaceholder>
   );
 });
 

@@ -27,11 +27,6 @@ export const BUTTON_HTML_TYPE = {
   RESET: 'reset',
 };
 
-export const BUTTON_RADIUS = {
-  ROUNDED: 'rounded',
-  ELLIPTIC: 'rounded',
-};
-
 const propTypes = {
   className: PropTypes.string,
   disabled: PropTypes.bool,
@@ -42,7 +37,6 @@ const propTypes = {
   textSize: typographySizeType,
   textWeight: typographyWeightType,
   label: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  buttonRadius: PropTypes.oneOf(Object.values(BUTTON_RADIUS)),
   entity: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   selected: PropTypes.bool,
   destructive: PropTypes.bool,

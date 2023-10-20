@@ -27,6 +27,7 @@ const propTypes = {
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
   placeholderRole: PropTypes.string,
+  children: PropTypes.node,
 };
 
 const defaultProps = {
@@ -50,6 +51,7 @@ const IconPlaceholder = React.forwardRef(
       disabled,
       onClick,
       placeholderRole,
+      children,
       ...props
     },
     forwardRef,
@@ -79,6 +81,7 @@ const IconPlaceholder = React.forwardRef(
             {...props}
           />
         )}
+        {children}
       </div>
     );
   },
