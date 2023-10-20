@@ -4,8 +4,8 @@ import classnames from 'classnames';
 import { ICONS } from '@common/svg';
 import { SIZES, PLACEHOLDER_SIZE } from '@common/constants';
 import { Label, LabelError } from '@common/labels';
-import Content from './content';
 import { INPUT_CONTENT_TYPE, INPUT_TYPES } from './constants';
+import Content from './content';
 import classes from './input.module.scss';
 
 const propTypes = {

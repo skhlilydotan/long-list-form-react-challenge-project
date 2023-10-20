@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import _find from 'lodash/find';
 import { USER_FIELDS } from '@constants';
 import { USER_FIELDS_PLACEHOLDER } from './constants.js';
-import Select from 'react-select';
-import { dropdownStyles, selectTheme } from '@common/styles/selectStyles.js';
+import { Select } from '@common/select';
 import styles from './userList.module.css';
+
 
 const propTypes = {
   entity: PropTypes.objectOf(PropTypes.shape({
@@ -38,8 +38,6 @@ const SelectField = ({ options, entity, index, onChange, fieldType }) => {
         value={selected}
         menuPortalTarget={document.body}
         menuPosition={'fixed'}
-        theme={selectTheme}
-        styles={dropdownStyles}
         isSearchable
         onChange={handleOnChanged}
         options={options}

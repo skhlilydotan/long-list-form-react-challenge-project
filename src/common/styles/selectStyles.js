@@ -1,4 +1,5 @@
 import colors from '@common/styles/colors.module.scss';
+import shadows from '@common/styles/_shadow.module.scss';
 
 /**
  * selectStyles - Style Object for React Select (https://react-select.com/home)
@@ -12,7 +13,7 @@ export const selectTheme = (theme) => ({
     ...theme.colors,
     primary25: colors.primary50,
     primary50: colors.primary600,
-    primary: colors.primary600,
+    primary: colors.primary300,
   },
 });
 const Z_INDEX = 1050;
@@ -40,16 +41,20 @@ export const selectStyles = {
   }),
   valueContainer: (provided, { selectProps }) => ({
     ...provided,
-    justifyContent: selectProps?.justifyContent || 'center',
+    padding: '0 10px',
+    justifyContent: selectProps?.justifyContent || 'flex-start',
   }),
   menu: (provided, { selectProps }) => ({
     ...provided,
     zIndex: Z_INDEX,
     width: selectProps?.width || selectDefaultWidth,
+    maxHeight: '320px',
   }),
   control: (provided, { selectProps }) => {
     return {
       ...provided,
+      borderRadius: '8px',
+      border: `1px solid ${colors.gray300}`,
       backgroundColor: selectProps?.backgroundColor || 'transparent',
       width: selectProps?.width,
       marginTop: selectProps?.marginTop,
@@ -69,7 +74,7 @@ export const selectStyles = {
 
 export const dropdownStyles = {
   ...selectStyles,
-  control: (provided, { selectProps }) => {
+  control: (provided, { isFocused, selectProps }) => {
     const errorStyle = {
       boxShadow: selectProps?.destructive
         ? `0px 0px 0px 1px ${colors.error500}`
@@ -83,6 +88,9 @@ export const dropdownStyles = {
         ...(selectProps.destructive ? errorStyle : {}),
       },
       width: selectProps?.width || selectDefaultWidth,
+      borderRadius: '8px',
+      border: `1px solid ${isFocused ? colors.primary300 : colors.gray300}`,
+      boxShadow: isFocused ? `${shadows.shadowFocusRing} ${colors.primary100} ,${shadows.sm}` : null,
     };
   },
   dropdownIndicator: (provided) => ({

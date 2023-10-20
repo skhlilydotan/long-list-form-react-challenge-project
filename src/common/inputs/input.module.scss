@@ -1,7 +1,9 @@
 @import "@common/styles/_typography.module.scss";
+@import "@common/styles/_basecolors.module.scss";
 
 .input.input {
-  font-family: $font-text;
+  @include set-text-font("sm", "regular");
+  color: color(gray900);
   border: none;
   outline: none;
   width: 100%;
