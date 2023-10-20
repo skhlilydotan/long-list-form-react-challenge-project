@@ -29,6 +29,7 @@ const propTypes = {
   inline: PropTypes.bool,
   stretch: PropTypes.bool,
   destructive: PropTypes.bool,
+  icon: PropTypes.node,
 };
 
 const defaultProps = {
@@ -55,6 +56,7 @@ const TextInput = React.forwardRef(
       onChange,
       onKeyDown,
       placeholder,
+      icon,
       ...contentProps
     },
     forwardRef,
@@ -83,6 +85,11 @@ const TextInput = React.forwardRef(
               placeholderSize={SIZES.SM}
               iconName={iconName}
             />
+          )}
+          {icon && (
+            <Content.Icon
+              placeholderSize={SIZES.SM}
+            >{icon}</Content.Icon>
           )}
           <Content.Input
             dataTestId={dataTestId}

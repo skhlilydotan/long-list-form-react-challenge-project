@@ -3,7 +3,6 @@ import { List } from 'react-virtualized';
 import { UserRow } from './UserRow.jsx';
 import { Card } from '@common/card/index.js';
 import { Button } from '@common/button/index.js';
-import { ICONS } from '@common/svg';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Container } from '@common/container';
 import styles from './userList.module.css';
@@ -18,6 +17,8 @@ import { USER_FIELDS_VALIDATION } from '@components/usersList/constants.js';
 import { INPUT_CONTENT_TYPE, INPUT_TYPES, TextInput } from '@common/inputs/index.js';
 import { LoadingIndicator } from '@common/loadingIndicator';
 import { EmptyState } from '@common/emptyState/index.js';
+import PlusIcon from '@common/assets/icons/plus.svg?react';
+import SearchIcon from '@common/assets/icons/search-lg.svg?react';
 
 const UsersList = () => {
   const ListRef = useRef(null);
@@ -41,7 +42,7 @@ const UsersList = () => {
     }
     return users;
   }, [users, searchTerm]);
-  
+
   const summary = useMemo(() => {
     const counts = users.reduce(
       (acc, user) => {
@@ -144,13 +145,14 @@ const UsersList = () => {
               placeholder='Search'
               size={SIZES.SM}
               valueType={INPUT_CONTENT_TYPE.TEXT}
-              type={INPUT_TYPES.SEARCH}
+              type={INPUT_TYPES.DEFAULT}
               onBlur={onSearch}
+              icon={<SearchIcon />}
             />
-            <Button buttonType={SKINS.SECONDARY_GRAY} label='Save' onClick={handleSave}
+            <Button buttonSize={SIZES.MD} buttonType={SKINS.SECONDARY_GRAY} label='Save' onClick={handleSave}
                     disabled={Boolean(summary.isNew || summary.empty || summary.invalid)} />
-            <Button buttonType={SKINS.PRIMARY} onClick={handleAdd}>
-              <Button.Icon iconName={ICONS.PLUS} />
+            <Button buttonSize={SIZES.MD} buttonType={SKINS.PRIMARY} onClick={handleAdd}>
+              <Button.Icon><PlusIcon /></Button.Icon>
               <Button.Text value='Add user' />
             </Button>
           </div>
