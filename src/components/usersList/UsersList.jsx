@@ -41,11 +41,7 @@ const UsersList = () => {
     }
     return users;
   }, [users, searchTerm]);
-
-  const enableSave = useMemo(() => {
-
-  }, []);
-
+  
   const summary = useMemo(() => {
     const counts = users.reduce(
       (acc, user) => {
@@ -68,7 +64,7 @@ const UsersList = () => {
   }, [dispatch, users]);
 
   const handleChange = useCallback((e, index, field) => {
-    const value = e.target.value;
+    const value = e.target?.value || e.value;
     let error = false;
     const empty = value === '';
 

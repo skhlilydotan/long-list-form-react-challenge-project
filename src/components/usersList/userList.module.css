@@ -36,6 +36,10 @@
     align-items: center;
 }
 
-.userRowInput {
+.userRowInput, .userRowInput {
     width: 230px;
+}
+
+.selectRowInput {
+    transform: unset;
 }
