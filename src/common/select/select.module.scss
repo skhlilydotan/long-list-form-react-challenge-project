@@ -1,0 +1,8 @@
+@import "@common/styles/_typography.module.scss";
+@import "@common/styles/_typography.module.scss";
+@import "@common/styles/_item.module.scss";
+
+.select {
+  color: color(gray900);
+  @include set-text-font("sm", "regular");
+}

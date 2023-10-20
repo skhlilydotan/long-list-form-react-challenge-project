@@ -1,0 +1,14 @@
+@import "@common/styles/basecolors.module.scss";
+
+.app {
+  background: color(gray25);
+  text-align: center;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+@media (min-height: 1000px) {
+  body {
+    overflow-y: hidden;
+  }
+}

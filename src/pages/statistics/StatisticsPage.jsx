@@ -1,7 +1,6 @@
-import styles from './statistics.module.css';
+import { PieChart } from '@components/charts';
 
-function StatisticsPage() {
-  return <div className={styles.pageRoot}>StatisticsPage</div>;
-}
+const StatisticsPage = () => <PieChart />;
+
 
 export default StatisticsPage;

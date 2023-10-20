@@ -1,0 +1,49 @@
+@import "src/common/styles/_typography.module.scss";
+@import "src/common/styles/_basecolors.module.scss";
+@import "src/common/styles/_item.module.scss";
+@import "src/common/styles/_skin.module.scss";
+
+.button {
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &[disabled],
+  &[disabled]:hover,
+  &[disabled]:focus,
+  &[disabled]:focus-visible {
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+@each $size, $value in $item-measurements {
+  .#{unquote($size)} {
+    @include item-alignment;
+    @include item-measurement(
+            $min-width: $default-min-width-icon,
+            $padding: false,
+            $size: $size,
+            $comp: "button"
+    );
+  }
+}
+
+
+@each $skin, $value in $hierarchy {
+  .#{unquote($skin)} {
+    @include build-type($type: $skin, $destructive: false);
+  }
+}
+
+@each $skin, $value in $hierarchy {
+  $selector: ".#{$skin}Destructive";
+  #{unquote($selector)} {
+    @include build-type($type: quote($skin), $destructive: true);
+  }
+}
+
+
+.stretch {
+  @include set-stretch;
+}

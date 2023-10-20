@@ -1,23 +1,5 @@
-import UsersList from './usersList/UsersList';
-import PrimaryButton from '../../components/PrimaryButton';
-import styles from './users.module.css';
+import UsersList from '@components/usersList/UsersList';
 
-function UsersPage() {
-  return (
-    <div className={styles.pageRoot}>
-      <div className={styles.pageContentContainer}>
-        <UsersList />
-        <div className={styles.rightButtonContainer}>
-          <PrimaryButton
-            disabled={false}
-            // TODO: Implement onClick handler
-          >
-            Save
-          </PrimaryButton>
-        </div>
-      </div>
-    </div>
-  );
-}
+const UsersPage = () => <UsersList />;
 
 export default UsersPage;

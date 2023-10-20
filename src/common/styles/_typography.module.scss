@@ -1,0 +1,114 @@
+@import "src/common/styles/_functions.module.scss";
+@import "src/common/styles/_propmap.module.scss";
+
+$font-display: "Montserrat", sans-serif;
+$font-text: "Inter", sans-serif;
+
+$font-weights: (
+        "regular": 400,
+        "medium": 500,
+        "semiBold": 600,
+        "bold": 700,
+);
+
+$typography-properties: (
+        "sizes": (
+                "xxl":(
+                        "display": ("fontSize":("px": 72, "rem": 4.5), "lineHeight":("px": 90, "rem": 5.625)),
+                        "text": ("fontSize":("px": 36, "rem": 1.5), "lineHeight":("px": 44, "rem": 2))
+                ),
+                "xl":(
+                        "display": ("fontSize":("px": 60, "rem": 3.75), "lineHeight":("px": 72, "rem": 4.5)),
+                        "text": ("fontSize":("px": 20, "rem": 1.25), "lineHeight":("px": 30, "rem": 1.875))
+                ),
+                "lg":(
+                        "display": ("fontSize":("px": 48, "rem": 3), "lineHeight":("px":60, "rem": 3.75)),
+                        "text": ("fontSize":("px": 18, "rem": 1.125), "lineHeight":("px": 28, "rem": 1.75))
+                ),
+                "md":(
+                        "display": ("fontSize":("px": 36, "rem": 2.25), "lineHeight":("px": 44, "rem": 2.75)),
+                        "text": ("fontSize":("px": 16, "rem": 1), "lineHeight":("px": 24, "rem": 1.5))
+                ),
+                "sm":(
+                        "display": ("fontSize":("px": 30, "rem": 1.875), "lineHeight":("px": 38, "rem": 2.375)),
+                        "text": ("fontSize":("px": 14, "rem": 0.875), "lineHeight":("px": 20, "rem": 1.25))
+                ),
+                "xs":(
+                        "display": ("fontSize":("px": 24, "rem": 1.5), "lineHeight":("px": 32, "rem": 2)),
+                        "text": ("fontSize":("px": 12, "rem": 0.75), "lineHeight":("px": 18, "rem": 1.125))
+                )
+        ),
+        "fontFamily": (
+                "display": $font-display,
+                "text": $font-text
+        )
+);
+
+
+@function get-typography-weight($weight) {
+  @return map-get($font-weights, $weight);
+}
+
+@function get-typography-font-family($component) {
+  @return map-deep-get($typography-properties, "fontFamily", $component);
+}
+
+@function get-typography-sizes($size, $component, $attr, $unit: "px") {
+  @return #{map-deep-get($typography-properties,"sizes", $size, $component,  $attr, $unit)}#{$unit};
+}
+
+@function get-comp-map($map, $comp, $attr) {
+  $result: ();
+  @each $size, $comp-map in $map {
+    @if map-has-key($comp-map, $comp) {
+      $value: get-typography-sizes($size, $comp, $attr);
+      $result: map-merge($result, ($size: $value));
+    }
+  }
+  @return $result;
+}
+
+@function get-typography-font-size($size, $comp) {
+  @return get-typography-sizes($size, $comp, "fontSize");
+}
+
+@function get-text-font-size($size) {
+  @return get-typography-font-size($size, "text");
+}
+
+@function get-display-font-size($size) {
+  @return get-typography-font-size($size, "display");
+}
+
+@function get-typography-line-height($size, $comp) {
+  @return get-typography-sizes($size, $comp, "lineHeight");
+}
+
+@function get-text-line-height($size) {
+  @return get-typography-line-height($size, "text");
+}
+
+@function get-display-line-height($size) {
+  @return get-typography-line-height($size, "display");
+}
+
+@mixin set-font($comp, $size, $weight) {
+  font-family: get-typography-font-family($comp);
+  line-height: get-typography-line-height($size, $comp);
+  font-size: get-typography-font-size($size, $comp);
+  font-weight: get-typography-weight($weight);
+}
+
+@mixin set-display-font($size, $weight) {
+  @include set-font("display", $size, $weight);
+}
+
+@mixin set-text-font($size, $weight) {
+  @include set-font("text", $size, $weight);
+}
+
+:export {
+  @include map-to-props($font-weights);
+  fontFamilyText: $font-text;
+  fontFamilyDisplay: $font-display;
+}

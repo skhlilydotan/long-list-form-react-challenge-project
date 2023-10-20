@@ -1,0 +1,74 @@
+@import "src/common/styles/_basecolors.module.scss";
+@import "src/common/styles/_typography.module.scss";
+@import "src/common/styles/_item.module.scss";
+@import "src/common/styles/_skin.module.scss";
+
+$state-selectors-input: (
+        "placeholder": "&.placeholder",
+        "default": "&.default",
+        "focused":"&:focus-within, &:focus, ",
+        "disabled":"&[disabled], &[disabled]:hover, &[disabled]:focus, &[disabled]:focus-visible"
+);
+
+$input-skin: (
+        "placeholder": ("color": gray500, "background-color": baseWhite, "border-color": gray300),
+        "default": ("color": gray900, "background-color": baseWhite, "border-color": gray300),
+        "focused": ("color": gray900, "background-color": baseWhite, "border-color": primary300, "box-shadow": primary100),
+        "disabled": ("color": gray500, "background-color": gray50, "border-color": gray300)
+);
+
+$input-skin-destructive: (
+        "placeholder": ("color": gray500, "background-color": baseWhite, "border-color": gray300),
+        "default": ("color": gray900, "background-color": baseWhite, "border-color": gray300),
+        "focused": ("color": gray900, "background-color": baseWhite, "border-color": primary300, "box-shadow": primary100),
+);
+
+@function get-color-input($state, $attr, $destructive: false) {
+  $color: map-deep-get($input-skin, $state, $attr);
+  @return color($color);
+}
+
+@mixin set-skin-input($state, $destructive: false) {
+  $properties: map-get($input-skin, $state);
+  @each $prop, $value in $properties {
+    $color: color($value);
+    @if ($prop == "box-shadow") {
+      @include set-box-shadow(if($destructive, color(error100), $color));
+    } @else if ($prop == "border-color") {
+      @include set-border(if($destructive, color(error300), $color));
+    } @else {
+      #{$prop}: $color;
+    }
+  }
+}
+
+@mixin build-icon-skin-input(
+  $stroke: false,
+  $destructive: false,
+  $state-selectors-use: $state-selectors-input
+) {
+
+  @each $state, $selector in $state-selectors-use {
+    $color: get-color-input($state, "color", $destructive);
+    @if $selector {
+      #{unquote($selector)} {
+        @include set-icon-color($color, $stroke: $stroke, $fill: (not $stroke));
+      }
+    } @else {
+      @include set-icon-color($color, $stroke: $stroke, $fill: (not $stroke));
+    }
+  }
+}
+
+
+@mixin build-input-skin( $destructive: false, $state-selectors-use: $state-selectors-input ) {
+  @each $state, $selector in $state-selectors-use {
+    @if $selector {
+      #{unquote($selector)} {
+        @include set-skin-input($state, $destructive);
+      }
+    } @else {
+      @include set-skin-input($state, $destructive);
+    }
+  }
+}

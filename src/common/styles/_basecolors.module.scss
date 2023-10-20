@@ -1,0 +1,74 @@
+$base_colors: (
+        baseTransparent: transparent,
+        baseWhite: #ffffff,
+        baseBlack: #000000,
+);
+
+$gray_colors: (
+        gray25: #fcfcfd,
+        gray50: #f9fafb,
+        gray100: #f2f4f7,
+        gray200: #eaecf0,
+        gray300: #d0d5dd,
+        gray400: #98a2b3,
+        gray500: #667085,
+        gray600: #475467,
+        gray700: #344054,
+        gray800: #1d2939,
+        gray900: #101828,
+);
+
+
+$primary_colors: (
+        primary25: #fef6fa,
+        primary50: #fef1f6,
+        primary100: #fde6f0,
+        primary200: #fcd2e4,
+        primary300: #f9a5c9,
+        primary400: #f778ae,
+        primary500: #f55d9e,
+        primary600: #f44b93,
+        primary700: #af3066,
+        primary800: #7a264a,
+        primary900: #621e3b,
+);
+
+$error_colors: (
+        error25: #fffbfa,
+        error50: #fef3f2,
+        error100: #fee4e2,
+        error200: #fecdca,
+        error300: #fda29b,
+        error400: #f97066,
+        error500: #f04438,
+        error600: #d92d20,
+        error700: #b42318,
+        error800: #912018,
+        error900: #7a271a,
+);
+
+$warning_colors: (
+        warning25: #FFFCF5,
+        warning50: #FFFAEB,
+        warning100: #FEF0C7,
+        warning200: #FEDF89,
+        warning300: #FEC84B,
+        warning400: #FDB022,
+        warning500: #F79009,
+        warning600: #DC6803,
+        warning700: #B54708,
+        warning800: #93370D,
+        warning900: #7A2E0E,
+);
+
+
+$colors_merge1: map_merge($base_colors, $gray_colors);
+$colors_merge2: map_merge($colors_merge1, $primary_colors);
+$colors_merge3: map_merge($colors_merge2, $error_colors);
+$colors_merge4: map_merge($colors_merge3, $warning_colors);
+
+$colors: $colors_merge4;
+
+@function color($color) {
+  @return map-get($colors, $color);
+}

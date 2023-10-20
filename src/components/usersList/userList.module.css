@@ -1,0 +1,45 @@
+.rightButtonContainer {
+    margin-left: auto;
+}
+
+
+.usersListContent {
+    display: flex;
+    align-items: center;
+    height: 400px;
+    width: 1230px;
+    padding: 15px;
+    justify-content: center;
+}
+
+.actionsContainer, .badgeContainer {
+    gap: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.badgeContainer {
+    margin-right: auto;
+}
+
+.actionsContainer {
+    margin-left: auto;
+}
+
+.userRow {
+    gap: 8px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.userRowInput, .userRowInput {
+    width: 230px;
+}
+
+.selectRowInput {
+    transform: unset;
+}

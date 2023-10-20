@@ -1,0 +1,27 @@
+@import "@common/styles/_basecolors.module.scss";
+
+$app-height: 100vh;
+$header-height: 72px;
+
+.app {
+  height: $app-height;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.header {
+  z-index: 1000;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  height: $header-height;
+  min-height: $header-height;
+}
+
+.main {
+  height: calc($app-height - $header-height);
+  display: flex;
+  justify-content: center;
+  padding: 110px 0;
+}

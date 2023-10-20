@@ -1,0 +1,18 @@
+@import "@common/styles/_skin_input.module.scss";
+@import "@common/styles/_item.module.scss";
+
+
+@each $size, $value in $input-measurements {
+  .#{unquote($size)} {
+    @include set-input-measurement($size);
+  }
+}
+
+.content {
+  @include input-alignment;
+  @include build-input-skin;
+}
+
+.destructive.destructive {
+  @include build-input-skin($destructive: true);
+}
