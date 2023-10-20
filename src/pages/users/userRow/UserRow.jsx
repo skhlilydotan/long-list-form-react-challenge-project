@@ -6,33 +6,17 @@ import styles from '../users.module.css';
 
 // user country must be one of those - for select/autocomplete implementation
 import countryOptions from '../../../data/countries.json';
+import { useUsersContext } from '../../../context/usersContext';
 
-const USER_ACTIONS = {
-  EDIT_FIELD: 'editTextField',
-};
+const UserRow = ({ user, handleEditUser, handleDeleteUser = () => {}, errors }) => {
+  const editTextField = (fieldName, inputValue) => {
+    const updatedUser = {
+      ...user,
+      [fieldName]: inputValue,
+    };
 
-function reducer(state, action) {
-  switch (action.type) {
-    case USER_ACTIONS.EDIT_FIELD: {
-      return {
-        ...state,
-        [action.payload.fieldName]: action.payload.inputValue,
-      };
-    }
-    default: {
-      return state;
-    }
-  }
-}
-
-const UserRow = ({ user, handleDeleteUser = () => {} }) => {
-  const [state, dispatch] = useReducer(reducer, user);
-
-  const editTextField = (fieldName, inputValue) =>
-    dispatch({
-      type: USER_ACTIONS.EDIT_FIELD,
-      payload: { fieldName, inputValue },
-    });
+    handleEditUser(updatedUser);
+  };
 
   return (
     <Grid container className={styles.userRow} columnGap={1}>
@@ -40,33 +24,45 @@ const UserRow = ({ user, handleDeleteUser = () => {} }) => {
       <Grid item xs>
         <InputField
           name="name"
-          value={state.name}
+          value={user.name}
           placeholder="User Name"
-          onChangehandler={editTextField}
+          handleChange={editTextField}
+          handleBlur={() => {
+            if (!user.name) editTextField('name', '');
+          }}
+          error={errors?.name && errors.name !== 'ok'}
         />
       </Grid>
       <Grid item xs>
         <InputField
           name="country"
-          value={state.country}
+          value={user.country}
           placeholder="Country"
-          onChangehandler={editTextField}
+          handleChange={editTextField}
         />
       </Grid>
       <Grid item xs>
         <InputField
           name="email"
-          value={state.email}
+          value={user.email}
           placeholder="Email"
-          onChangehandler={editTextField}
+          handleChange={editTextField}
+          handleBlur={() => {
+            if (!user.email) editTextField('email', '');
+          }}
+          error={errors?.email && errors.email !== 'ok'}
         />
       </Grid>
       <Grid item xs>
         <InputField
           name="phone"
-          value={state.phone}
+          value={user.phone}
           placeholder="Phone Number"
-          onChangehandler={editTextField}
+          handleChange={editTextField}
+          handleBlur={() => {
+            if (!user.phone) editTextField('phone', '');
+          }}
+          error={errors?.phone && errors.phone !== 'ok'}
         />
       </Grid>
       <Grid item xs="auto">
