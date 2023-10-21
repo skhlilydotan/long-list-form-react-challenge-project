@@ -35,9 +35,19 @@
   background-color: #1f2a62;
 }
 
+.usersListFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px 16px;
+  background-color: #e20753;
+}
+
 .usersListContent {
   overflow: auto;
-  height: calc(100% - 96px);
+  height: calc(100% - 80px);
   padding: 20px 25px;
 }
 

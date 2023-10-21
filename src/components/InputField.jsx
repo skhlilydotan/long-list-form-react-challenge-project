@@ -8,13 +8,16 @@ const StyledTextField = styled(TextField)({
   borderRadius: '4px',
 });
 
-const InputField = ({ name, value, onChangehandler, error, disabled, placeholder }) => {
+const InputField = ({ name, value, onChangehandler, error, disabled, placeholder, dirty, setDirty }) => {
   return (
     <StyledTextField
       name={name}
       value={value}
-      onChange={(e) => onChangehandler(e.target.name, e.target.value)}
-      error={error}
+      onChange={(e) => {
+        onChangehandler(e.target.name, e.target.value);
+        setDirty(true);
+      }}
+      error={error && dirty}
       disabled={disabled}
       placeholder={placeholder}
       variant="outlined"
@@ -28,11 +31,12 @@ const InputField = ({ name, value, onChangehandler, error, disabled, placeholder
   );
 };
 
-// TODO: Implement passed props
 InputField.defaultProps = {
   name: 'text_field_name',
   value: '',
   onChangehandler: () => {},
+  setDirty: () => {},
+  dirty: false,
   error: false,
   disabled: false,
   placeholder: '',
